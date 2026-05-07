@@ -4,7 +4,7 @@ import { platform } from 'process'
 
 const HOOK_BEGIN = '# >>> mindr-begin <<<'
 const HOOK_END = '# >>> mindr-end <<<'
-const HOOK_BODY = 'mindr internal on-commit "$(git rev-parse HEAD)"'
+const HOOK_BODY = 'mindragent internal on-commit "$(git rev-parse HEAD)"'
 
 const MINDR_BLOCK = `${HOOK_BEGIN}\n${HOOK_BODY}\n${HOOK_END}`
 

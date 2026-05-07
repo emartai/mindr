@@ -9,6 +9,8 @@ import {
   checkpointSession,
   estimateSavings,
   estimateTokens,
+  queryDebt,
+  queryConventions,
   scoreContextHealth,
 } from '@ai-emart/mindr-core'
 
@@ -105,6 +107,28 @@ const TOOLS = [
         module: { type: 'string', description: 'Filter by module tag' },
         since:  { type: 'string', description: 'ISO date — only return memories created after this date' },
         limit:  { type: 'number', description: 'Maximum number of results (default: 20)' },
+      },
+    },
+  },
+  {
+    name: 'mindr:get_debt',
+    description: 'List active technical debt items (TODO / FIXME / HACK markers). Returns location, severity, keyword, and age.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        module:   { type: 'string', description: 'Filter by module' },
+        severity: { type: 'string', enum: ['high', 'medium', 'low'], description: 'Filter by severity level' },
+        limit:    { type: 'number', description: 'Maximum number of results (default: 50)' },
+      },
+    },
+  },
+  {
+    name: 'mindr:get_conventions',
+    description: 'Return detected code convention profiles — naming styles, file patterns, import grouping, and error handling per language.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        language: { type: 'string', description: 'Filter to a specific language (e.g. "typescript", "python")' },
       },
     },
   },
@@ -235,6 +259,53 @@ async function handleContextHealth(args: JsonObj): Promise<string> {
   return JSON.stringify({ score: result.score, recommendation: result.recommendation, breakdown: result.breakdown })
 }
 
+async function handleGetDebt(args: JsonObj, backend: MemoryBackend): Promise<string> {
+  let mems = await queryDebt(backend)
+
+  if (typeof args['module'] === 'string') {
+    mems = mems.filter((m) => m.tags.some((t) => t.key === 'module' && t.value === args['module']))
+  }
+  if (typeof args['severity'] === 'string') {
+    mems = mems.filter((m) => m.tags.some((t) => t.key === 'severity' && t.value === args['severity']))
+  }
+
+  const limit = typeof args['limit'] === 'number' ? args['limit'] : 50
+  const results = mems.slice(0, limit)
+
+  if (results.length === 0) return 'No active debt items found.'
+
+  const ageDays = (iso: string) => Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86400000))
+
+  return results.map((m) => {
+    const severity = m.tags.find((t) => t.key === 'severity')?.value ?? 'medium'
+    const module   = m.tags.find((t) => t.key === 'module')?.value ?? '?'
+    const file     = typeof m.metadata?.['file'] === 'string' ? m.metadata['file'] : ''
+    const line     = typeof m.metadata?.['line'] === 'number' ? `:${m.metadata['line']}` : ''
+    const keyword  = typeof m.metadata?.['keyword'] === 'string' ? m.metadata['keyword'] : 'TODO'
+    const location = file ? `${file}${line}` : ''
+    const age      = ageDays(m.createdAt)
+    return `[${severity}] ${keyword} ${location ? location + ' — ' : ''}${m.content} (${age}d, module=${module})`
+  }).join('\n')
+}
+
+async function handleGetConventions(args: JsonObj, backend: MemoryBackend): Promise<string> {
+  let profiles = await queryConventions(backend)
+
+  if (typeof args['language'] === 'string') {
+    profiles = profiles.filter((p) => p.language === args['language'])
+  }
+
+  if (profiles.length === 0) return 'No convention profiles found. Run mindr init or make a commit to trigger detection.'
+
+  return profiles.map((p) => {
+    const lines = [`Language: ${p.language} (${p.analyzedFiles} files scanned)`]
+    for (const c of p.conventions) {
+      lines.push(`  ${c.category}: ${c.pattern} — ${c.score}% (${c.sampleCount} samples)`)
+    }
+    return lines.join('\n')
+  }).join('\n\n')
+}
+
 async function handleCheckpoint(args: JsonObj, backend: MemoryBackend): Promise<string> {
   const sessionId = String(args['session_id'] ?? '')
   if (!sessionId) return 'Error: session_id is required'
@@ -247,9 +318,12 @@ async function handleCheckpoint(args: JsonObj, backend: MemoryBackend): Promise<
 // Server factory
 // ---------------------------------------------------------------------------
 
+declare const __MINDR_VERSION__: string
+const _SERVER_VERSION = typeof __MINDR_VERSION__ !== 'undefined' ? __MINDR_VERSION__ : '0.0.0'
+
 export function createMindrServer(backend: MemoryBackend): Server {
   const server = new Server(
-    { name: 'mindr', version: '0.0.1' },
+    { name: 'mindr', version: _SERVER_VERSION },
     { capabilities: { tools: {} } },
   )
 
@@ -268,6 +342,8 @@ export function createMindrServer(backend: MemoryBackend): Server {
         case 'mindr:context_health': text = await handleContextHealth(args); break
         case 'mindr:checkpoint': text = await handleCheckpoint(args, backend); break
         case 'mindr:query':       text = await handleQuery(args, backend);      break
+        case 'mindr:get_debt':    text = await handleGetDebt(args, backend);    break
+        case 'mindr:get_conventions': text = await handleGetConventions(args, backend); break
         default: text = `Unknown tool: ${name}`
       }
     } catch (err) {

@@ -128,8 +128,17 @@ export function addInitCommand(program: Command, deps: InitDeps = {}): void {
   program
     .command('init')
     .description('Initialize Mindr in the current git repository')
-    .action(async () => {
-      await runInit(deps).catch((err: unknown) => {
+    .option('--backend <type>', 'backend type: sqlite or remembr (skips prompt)', '')
+    .option('--remembr-url <url>', 'Remembr base URL (used with --backend=remembr)', '')
+    .action(async (opts: { backend?: string; remembrUrl?: string }) => {
+      const mergedDeps: InitDeps = { ...deps }
+      if (opts.backend === 'sqlite' || opts.backend === 'remembr') {
+        mergedDeps.answers = {
+          backendChoice: opts.backend,
+          remembrUrl: opts.backend === 'remembr' ? (opts.remembrUrl ?? '') : undefined,
+        }
+      }
+      await runInit(mergedDeps).catch((err: unknown) => {
         process.stderr.write(`${chalk.red('✗')} ${String(err)}\n`)
         process.exit(1)
       })

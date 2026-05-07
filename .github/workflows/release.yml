@@ -87,17 +87,23 @@ jobs:
       - name: Build
         run: pnpm -r build
 
-      - name: Publish CLI to npm
-        working-directory: packages/cli
+      - name: Publish core to npm
+        working-directory: packages/core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --no-git-checks --access public
 
       - name: Publish SDK to npm
         working-directory: packages/sdk
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --no-git-checks --access public
+
+      - name: Publish CLI to npm
+        working-directory: packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm publish --no-git-checks --access public
 
   release:
     name: Create GitHub Release

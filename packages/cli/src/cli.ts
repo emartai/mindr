@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { Command } from 'commander'
 import { addInternalCommands } from './commands/internal.js'
 import { addGenerateCommands } from './commands/generate.js'
@@ -20,7 +19,11 @@ import { addStatsCommand } from './commands/stats.js'
 import { addUiCommand } from './commands/ui.js'
 
 const program = new Command()
-program.name('mindr').description('Memory-augmented dev tooling').version('0.0.1')
+// __MINDR_VERSION__ is replaced at build time by tsup's define option
+declare const __MINDR_VERSION__: string
+const VERSION = typeof __MINDR_VERSION__ !== 'undefined' ? __MINDR_VERSION__ : '0.0.0'
+
+program.name('mindragent').description('Memory-augmented dev tooling').version(VERSION)
 
 addInitCommand(program)
 addRememberCommand(program)

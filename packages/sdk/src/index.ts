@@ -632,4 +632,5 @@ export class Mindr {
   }
 }
 
-export const VERSION = '0.0.1'
+declare const __MINDR_VERSION__: string
+export const VERSION = typeof __MINDR_VERSION__ !== 'undefined' ? __MINDR_VERSION__ : '0.0.0'

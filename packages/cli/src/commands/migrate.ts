@@ -17,12 +17,8 @@ export async function runMigrateSqliteToRemembr(deps: MigrateDeps = {}): Promise
   const config = depConfig ?? loadConfig(repoRoot)
   const migrateImpl = depMigrate ?? migrateSqliteToRemembr
 
-  if (config.storage.backend !== 'remembr') {
-    throw new Error('Config backend is not "remembr". Update storage.backend first.')
-  }
-
   if (dryRun) {
-    // Count memories in SQLite without touching Remembr
+    // Dry-run only reads SQLite — no Remembr connection needed
     const sqliteConfig: MindrConfig = {
       ...config,
       storage: { backend: 'sqlite', sqlite_path: config.storage.sqlite_path },
@@ -34,6 +30,10 @@ export async function runMigrateSqliteToRemembr(deps: MigrateDeps = {}): Promise
       `${chalk.cyan('DRY RUN')} — would migrate ${chalk.bold(String(all.length))} memories from SQLite → Remembr. No data written.\n`,
     )
     return
+  }
+
+  if (config.storage.backend !== 'remembr') {
+    throw new Error('Config backend is not "remembr". Update storage.backend first.')
   }
 
   process.stdout.write('Migrating SQLite → Remembr...\n')
