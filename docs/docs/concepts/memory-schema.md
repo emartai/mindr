@@ -28,13 +28,13 @@ The `type` tag is the primary classifier. Every memory has exactly one type tag 
 
 | Type | Who creates it | Purpose |
 | --- | --- | --- |
-| `decision` | Post-commit hook, `mindr remember` | Architectural or significant code choices |
-| `convention` | Post-commit hook, `mindr init` | Naming and file conventions per language |
+| `decision` | Post-commit hook, `mindragent remember` | Architectural or significant code choices |
+| `convention` | Post-commit hook, `mindragent init` | Naming and file conventions per language |
 | `bug_pattern` | Post-commit hook (fix commits) | Structural fingerprint of a known bug shape |
-| `debt` | Post-commit hook, `mindr debt add` | TODO / FIXME / HACK markers with location |
-| `debt_resolved` | `mindr debt resolve` | Marker that a debt item was addressed |
-| `session_checkpoint` | `mindr session checkpoint` | Session summary written before context switch |
-| `note` | `mindr remember` | Free-form manual notes |
+| `debt` | Post-commit hook, `mindragent debt add` | TODO / FIXME / HACK markers with location |
+| `debt_resolved` | `mindragent debt resolve` | Marker that a debt item was addressed |
+| `session_checkpoint` | `mindragent session checkpoint` | Session summary written before context switch |
+| `note` | `mindragent remember` | Free-form manual notes |
 | `context` | Post-commit hook | Activity record for session metering |
 
 ## Common tags

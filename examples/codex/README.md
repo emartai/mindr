@@ -7,9 +7,9 @@ Gives OpenAI Codex CLI persistent memory of your codebase via MCP.
 1. Install Mindr and initialise your project:
 
 ```bash
-npm install -g mindr
+npm install -g mindragent
 cd your-project
-mindr init
+mindragent init
 ```
 
 2. Add the MCP server to your `codex.toml` (project-level) or `~/.codex/config.toml` (global):
@@ -17,7 +17,7 @@ mindr init
 ```toml
 [[mcp_servers]]
 name    = "mindr"
-command = "mindr serve"
+command = "mindragent serve"
 ```
 
 3. Run Codex as usual — Mindr context is injected at session start.

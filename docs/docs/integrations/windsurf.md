@@ -14,7 +14,7 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
 **3. Add Mindr to Windsurf's MCP configuration.**
@@ -22,7 +22,7 @@ mindr init
 Open Windsurf settings, navigate to **AI → MCP Servers**, and add a new server:
 
 - **Name:** `mindr`
-- **Command:** `mindr`
+- **Command:** `mindragent`
 - **Args:** `serve`
 
 Or edit `~/.codeium/windsurf/mcp_config.json` directly:
@@ -31,7 +31,7 @@ Or edit `~/.codeium/windsurf/mcp_config.json` directly:
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindr",
+      "command": "mindragent",
       "args": ["serve"]
     }
   }

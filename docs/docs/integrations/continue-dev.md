@@ -14,7 +14,7 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
 **3. Add Mindr as an MCP server in Continue's config.**
@@ -26,7 +26,7 @@ Edit `~/.continue/config.json`:
   "mcpServers": [
     {
       "name": "mindr",
-      "command": "mindr",
+      "command": "mindragent",
       "args": ["serve"]
     }
   ]
@@ -38,7 +38,7 @@ Or if you are using YAML config (`~/.continue/config.yaml`):
 ```yaml
 mcpServers:
   - name: mindr
-    command: mindr
+    command: mindragent
     args:
       - serve
 ```

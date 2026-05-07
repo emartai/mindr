@@ -6,16 +6,16 @@ Install the CLI globally:
 npm install -g mindragent
 ```
 
-The binary is `mindr`. All commands discover the project root by walking up from `cwd` to find `.mindr/config.toml`.
+The binary is `mindragent`. All commands discover the project root by walking up from `cwd` to find `.mindr/config.toml`.
 
 ---
 
-## mindr init
+## mindragent init
 
 Initialize Mindr in the current git repository.
 
 ```bash
-mindr init
+mindragent init
 ```
 
 Interactive prompts select a storage backend (SQLite or Remembr). Creates `.mindr/config.toml`, installs the post-commit hook, and runs an initial convention scan.
@@ -24,12 +24,12 @@ Interactive prompts select a storage backend (SQLite or Remembr). Creates `.mind
 
 ---
 
-## mindr remember
+## mindragent remember
 
 Store a manual memory.
 
 ```bash
-mindr remember "<content>" [options]
+mindragent remember "<content>" [options]
 ```
 
 **Options:**
@@ -43,31 +43,31 @@ mindr remember "<content>" [options]
 **Examples:**
 
 ```bash
-mindr remember "Switched from REST to tRPC for internal APIs" --type decision --module api
-mindr remember "JWT access tokens expire in 15 minutes" --type note --module auth
-mindr remember "billing retry loop is temporary" --type debt --module billing --tag severity:high
+mindragent remember "Switched from REST to tRPC for internal APIs" --type decision --module api
+mindragent remember "JWT access tokens expire in 15 minutes" --type note --module auth
+mindragent remember "billing retry loop is temporary" --type debt --module billing --tag severity:high
 ```
 
 ---
 
-## mindr forget
+## mindragent forget
 
 Soft-delete a memory by ID.
 
 ```bash
-mindr forget <id>
+mindragent forget <id>
 ```
 
 The memory is marked deleted and excluded from all future queries. Pass the full ID or a prefix — any unique prefix is accepted.
 
 ---
 
-## mindr memory list
+## mindragent memory list
 
 List stored memories in a table.
 
 ```bash
-mindr memory list [options]
+mindragent memory list [options]
 ```
 
 **Options:**
@@ -84,27 +84,27 @@ mindr memory list [options]
 **Example:**
 
 ```bash
-mindr memory list --type decision --module api --since 2026-01-01
+mindragent memory list --type decision --module api --since 2026-01-01
 ```
 
 ---
 
-## mindr memory inspect
+## mindragent memory inspect
 
 Print full JSON for a single memory, including quality breakdown.
 
 ```bash
-mindr memory inspect <id>
+mindragent memory inspect <id>
 ```
 
 ---
 
-## mindr decisions
+## mindragent decisions
 
 List decision memories in a table with confidence scores and triggers.
 
 ```bash
-mindr decisions [options]
+mindragent decisions [options]
 ```
 
 **Options:**
@@ -119,22 +119,22 @@ mindr decisions [options]
 
 ---
 
-## mindr decisions reverse
+## mindragent decisions reverse
 
 Mark a decision as reversed (superseded by a later decision). The decision remains visible but is struck through in `decisions list` output.
 
 ```bash
-mindr decisions reverse <id>
+mindragent decisions reverse <id>
 ```
 
 ---
 
-## mindr replay
+## mindragent replay
 
 Show decisions in chronological order (oldest first). Useful for reviewing how the codebase evolved.
 
 ```bash
-mindr replay [options]
+mindragent replay [options]
 ```
 
 **Options:**
@@ -149,32 +149,32 @@ mindr replay [options]
 
 ---
 
-## mindr branch status
+## mindragent branch status
 
 Show memory activity scoped to the current git branch: branch-specific memories, reachable memories from the last 90 days, and shared memories from the default branch.
 
 ```bash
-mindr branch status [--json]
+mindragent branch status [--json]
 ```
 
 ---
 
-## mindr bugs list
+## mindragent bugs list
 
 List stored bug-pattern memories (fingerprints of pre-fix function shapes).
 
 ```bash
-mindr bugs list [--module <name>] [--json]
+mindragent bugs list [--module <name>] [--json]
 ```
 
 ---
 
-## mindr debt list
+## mindragent debt list
 
 List active technical debt items.
 
 ```bash
-mindr debt list [options]
+mindragent debt list [options]
 ```
 
 **Options:**
@@ -188,12 +188,12 @@ mindr debt list [options]
 
 ---
 
-## mindr debt add
+## mindragent debt add
 
 Manually record a technical debt item.
 
 ```bash
-mindr debt add "<text>" --file <path> [--severity <level>]
+mindragent debt add "<text>" --file <path> [--severity <level>]
 ```
 
 **Options:**
@@ -206,39 +206,39 @@ mindr debt add "<text>" --file <path> [--severity <level>]
 **Example:**
 
 ```bash
-mindr debt add "Temporary retry loop — replace with queue" --file src/billing/invoice.ts --severity high
+mindragent debt add "Temporary retry loop — replace with queue" --file src/billing/invoice.ts --severity high
 ```
 
 ---
 
-## mindr debt resolve
+## mindragent debt resolve
 
 Mark a debt item as resolved.
 
 ```bash
-mindr debt resolve <id>
+mindragent debt resolve <id>
 ```
 
 Stores a `debt_resolved` marker. The original debt memory is preserved for audit purposes.
 
 ---
 
-## mindr debt report
+## mindragent debt report
 
 Print a markdown table summarising debt by module and severity.
 
 ```bash
-mindr debt report
+mindragent debt report
 ```
 
 ---
 
-## mindr session health
+## mindragent session health
 
 Score context health for a session (0–100). A score below 40 means the session has drifted; consider starting fresh.
 
 ```bash
-mindr session health <session-id>
+mindragent session health <session-id>
 ```
 
 Output (JSON):
@@ -259,78 +259,78 @@ Output (JSON):
 
 ---
 
-## mindr session checkpoint
+## mindragent session checkpoint
 
 Write a checkpoint memory for a session. Useful before switching context.
 
 ```bash
-mindr session checkpoint <session-id>
+mindragent session checkpoint <session-id>
 ```
 
 ---
 
-## mindr stats
+## mindragent stats
 
 Show token metering and estimated savings.
 
 ```bash
-mindr stats [--session <id>] [--last <window>]
+mindragent stats [--session <id>] [--last <window>]
 ```
 
 `--last` accepts `30m`, `2h`, `7d`, `2w` (minutes, hours, days, weeks).
 
 ---
 
-## mindr status
+## mindragent status
 
 Show Mindr status: backend type, git hook status, last processed commit, and per-type memory counts.
 
 ```bash
-mindr status [--json]
+mindragent status [--json]
 ```
 
 ---
 
-## mindr config get
+## mindragent config get
 
 Read a config value by dotted key.
 
 ```bash
-mindr config get <key>
+mindragent config get <key>
 ```
 
 **Examples:**
 
 ```bash
-mindr config get storage.backend
-mindr config get remembr.base_url
+mindragent config get storage.backend
+mindragent config get remembr.base_url
 ```
 
 ---
 
-## mindr config set
+## mindragent config set
 
 Write a config value by dotted key.
 
 ```bash
-mindr config set <key> <value>
+mindragent config set <key> <value>
 ```
 
 **Examples:**
 
 ```bash
-mindr config set storage.backend remembr
-mindr config set remembr.base_url https://api.remembr.io
+mindragent config set storage.backend remembr
+mindragent config set remembr.base_url https://api.remembr.io
 ```
 
 ---
 
-## mindr generate agents-md
+## mindragent generate agents-md
 
 Generate `AGENTS.md` from observed patterns and stored memories.
 
 ```bash
-mindr generate agents-md [-o <path>] [--force]
+mindragent generate agents-md [-o <path>] [--force]
 ```
 
 **Options:**
@@ -342,56 +342,56 @@ mindr generate agents-md [-o <path>] [--force]
 
 ---
 
-## mindr generate claude-md
+## mindragent generate claude-md
 
 Generate `CLAUDE.md` (Claude Code variant of AGENTS.md).
 
 ```bash
-mindr generate claude-md [-o <path>] [--force]
+mindragent generate claude-md [-o <path>] [--force]
 ```
 
 ---
 
-## mindr generate --all
+## mindragent generate --all
 
 Generate both `AGENTS.md` and `CLAUDE.md` in one step.
 
 ```bash
-mindr generate --all [--force]
+mindragent generate --all [--force]
 ```
 
 ---
 
-## mindr serve
+## mindragent serve
 
 Start the MCP server on stdio transport. Used as the command in agent MCP configurations.
 
 ```bash
-mindr serve
+mindragent serve
 ```
 
 All diagnostic output goes to stderr. stdout is the MCP protocol channel.
 
 ---
 
-## mindr ui
+## mindragent ui
 
 Start the local Mindr dashboard at `http://127.0.0.1:3131`.
 
 ```bash
-mindr ui [--port <n>]
+mindragent ui [--port <n>]
 ```
 
 Pages: Overview, Memories, Decisions, Conventions, Technical Debt, Sessions. Restricted to localhost.
 
 ---
 
-## mindr migrate sqlite-to-remembr
+## mindragent migrate sqlite-to-remembr
 
 Copy all SQLite memories to the Remembr backend. Requires config to already be set to `backend = "remembr"`.
 
 ```bash
-mindr migrate sqlite-to-remembr [--dry-run]
+mindragent migrate sqlite-to-remembr [--dry-run]
 ```
 
 `--dry-run` prints the count of memories that would be migrated without writing anything.

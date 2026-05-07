@@ -14,7 +14,7 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
 **3. Register Mindr as an MCP server in Cursor.**
@@ -24,7 +24,7 @@ Open Cursor settings (`Ctrl+Shift+J` / `Cmd+Shift+J`), go to **Features → MCP 
 ```json
 {
   "mindr": {
-    "command": "mindr",
+    "command": "mindragent",
     "args": ["serve"]
   }
 }
@@ -36,7 +36,7 @@ Or edit `~/.cursor/mcp.json` directly:
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindr",
+      "command": "mindragent",
       "args": ["serve"]
     }
   }

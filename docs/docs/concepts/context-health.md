@@ -66,7 +66,7 @@ Response:
 Via CLI:
 
 ```bash
-mindr session health <session-id>
+mindragent session health <session-id>
 ```
 
 Via SDK:
@@ -81,7 +81,7 @@ console.log(health.score, health.recommendation);
 Before switching context or starting a long tangent, write a checkpoint:
 
 ```bash
-mindr session checkpoint <session-id>
+mindragent session checkpoint <session-id>
 ```
 
 ```ts
@@ -91,7 +91,7 @@ await mindr.checkpointSession('session-abc');
 This stores a `session_checkpoint` memory that can be retrieved in a later session to resume where you left off:
 
 ```bash
-mindr memory list --type session_checkpoint
+mindragent memory list --type session_checkpoint
 ```
 
 ## Topic spread

@@ -14,18 +14,18 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
-**3. Start `mindr serve` alongside Aider.**
+**3. Start `mindragent serve` alongside Aider.**
 
 In one terminal:
 
 ```bash
-mindr serve
+mindragent serve
 ```
 
-**4. Configure the MCP bridge** you use for Aider to point at `mindr serve`. Refer to your MCP bridge's documentation for the exact config format. The MCP server communicates on stdio.
+**4. Configure the MCP bridge** you use for Aider to point at `mindragent serve`. Refer to your MCP bridge's documentation for the exact config format. The MCP server communicates on stdio.
 
 ## Alternative: inject context manually
 
@@ -33,14 +33,14 @@ If you do not have an MCP bridge, you can inject Mindr context into Aider's syst
 
 ```bash
 # Generate context and pipe to Aider
-mindr generate agents-md
+mindragent generate agents-md
 aider --read AGENTS.md
 ```
 
 Or use `--system-prompt`:
 
 ```bash
-mindr_context=$(mindr generate agents-md --output /dev/stdout 2>/dev/null)
+mindr_context=$(mindragent generate agents-md --output /dev/stdout 2>/dev/null)
 aider --system-prompt "$mindr_context"
 ```
 

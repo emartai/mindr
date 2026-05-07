@@ -14,7 +14,7 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
 **3. Add the MCP server to your Codex configuration.**
@@ -24,7 +24,7 @@ Edit `~/.codex/config.toml` (or create it):
 ```toml
 [[mcp_servers]]
 name    = "mindr"
-command = "mindr serve"
+command = "mindragent serve"
 ```
 
 Or in YAML format (`~/.codex/config.yaml`):
@@ -32,7 +32,7 @@ Or in YAML format (`~/.codex/config.yaml`):
 ```yaml
 mcp_servers:
   - name: mindr
-    command: mindr serve
+    command: mindragent serve
 ```
 
 **4. Start a new Codex session.** The Mindr tools will be available automatically.

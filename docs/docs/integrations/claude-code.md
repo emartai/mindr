@@ -14,7 +14,7 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
 **3. Add the MCP server to Claude Code settings.**
@@ -25,7 +25,7 @@ For a single project, create or edit `.claude/settings.json` in your project roo
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindr",
+      "command": "mindragent",
       "args": ["serve"]
     }
   }
@@ -99,10 +99,10 @@ Claude will call `mindr:remember` with `type: "decision"` and the content you sp
 
 ## Viewing what Mindr knows
 
-Run `mindr status` in your terminal to see memory counts, or open the local dashboard:
+Run `mindragent status` in your terminal to see memory counts, or open the local dashboard:
 
 ```bash
-mindr ui
+mindragent ui
 ```
 
 Then visit `http://127.0.0.1:3131` in your browser.

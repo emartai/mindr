@@ -3,4 +3,4 @@
 
 [[mcp_servers]]
 name    = "mindr"
-command = "mindr serve"
+command = "mindragent serve"

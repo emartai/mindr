@@ -10,7 +10,7 @@ The score is entirely deterministic — no ML, no embeddings, no external calls.
 | --- | --- | --- |
 | Recency | 40 | Decays linearly over 30 days from creation |
 | Commit association | 25 | Memory has a `git_commit` tag |
-| Manual capture | 20 | Memory was created with `role: 'user'` (i.e. `mindr remember`) |
+| Manual capture | 20 | Memory was created with `role: 'user'` (i.e. `mindragent remember`) |
 | Retrieval frequency | 10 | `metadata.retrieveCount` increments each time the memory is served in context |
 | Contradiction penalty | −25 | Memory is tagged as a reversed decision |
 
@@ -42,7 +42,7 @@ A reversed decision scores negatively to ensure it is excluded before any active
 ## Inspecting a score
 
 ```bash
-mindr memory inspect <id>
+mindragent memory inspect <id>
 ```
 
 Output includes `qualityScore` and the full `qualityBreakdown`:
@@ -66,7 +66,7 @@ Output includes `qualityScore` and the full `qualityBreakdown`:
 ## Sorting by quality
 
 ```bash
-mindr memory list --sort quality
+mindragent memory list --sort quality
 ```
 
 ```ts

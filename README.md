@@ -8,6 +8,8 @@ AI coding agents are stateless by default — every session starts from zero, re
 [![npm version](https://img.shields.io/npm/v/mindragent)](https://www.npmjs.com/package/mindragent)
 [![npm version](https://img.shields.io/npm/v/@ai-emart/mindr)](https://www.npmjs.com/package/@ai-emart/mindr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> **Note on naming.** Mindr is the product name. The CLI binary on npm is `mindragent` (the name `mindr` was already taken). The npm SDK package is still `@ai-emart/mindr`. MCP tool names like `mindr:get_context` are protocol identifiers and remain unchanged.
 [![Node](https://img.shields.io/node/v/mindragent)](https://www.npmjs.com/package/mindragent)
 
 ---
@@ -20,10 +22,10 @@ npm install -g mindragent
 
 # Set up Mindr in your repo
 cd my-project
-mindr init
+mindragent init
 
 # Generate AGENTS.md from observed patterns
-mindr generate agents-md
+mindragent generate agents-md
 ```
 
 Sample output:
@@ -69,7 +71,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "mcpServers": {
-    "mindr": { "command": "mindr", "args": ["serve"] }
+    "mindr": { "command": "mindragent", "args": ["serve"] }
   }
 }
 ```
@@ -81,7 +83,7 @@ Add to `codex.toml`:
 ```toml
 [[mcp_servers]]
 name    = "mindr"
-command = "mindr serve"
+command = "mindragent serve"
 ```
 
 ---

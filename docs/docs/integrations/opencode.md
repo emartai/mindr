@@ -14,7 +14,7 @@ npm install -g mindragent
 
 ```bash
 cd my-project
-mindr init
+mindragent init
 ```
 
 **3. Add Mindr to `opencode.json`.**
@@ -26,7 +26,7 @@ Create or edit `opencode.json` in your project root (or `~/.opencode/opencode.js
   "mcp": {
     "servers": {
       "mindr": {
-        "command": "mindr",
+        "command": "mindragent",
         "args": ["serve"]
       }
     }

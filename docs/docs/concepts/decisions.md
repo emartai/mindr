@@ -35,7 +35,7 @@ Stored decisions expose the full trigger list and confidence score in their meta
 Store a decision without a commit:
 
 ```bash
-mindr remember "Chose PostgreSQL over MongoDB for ACID guarantees" --type decision --module db
+mindragent remember "Chose PostgreSQL over MongoDB for ACID guarantees" --type decision --module db
 ```
 
 Or via the SDK:
@@ -55,7 +55,7 @@ Manual memories have `role: 'user'` and receive a 20-point quality bonus from th
 When an approach is superseded, mark the original decision as reversed:
 
 ```bash
-mindr decisions reverse <id>
+mindragent decisions reverse <id>
 ```
 
 This stores a reversal marker memory. Reversed decisions still appear in `decisions list` (struck through) but are excluded from context injection. The `reversed: true` field is set on the `Decision` object returned by the SDK.
@@ -64,8 +64,8 @@ This stores a reversal marker memory. Reversed decisions still appear in `decisi
 
 ```bash
 # CLI
-mindr decisions --module api --from 2026-01-01
-mindr replay --show-reversed   # chronological, with reversals visible
+mindragent decisions --module api --from 2026-01-01
+mindragent replay --show-reversed   # chronological, with reversals visible
 ```
 
 ```ts
@@ -106,7 +106,7 @@ confidence ≥ 0.15?
 store decision memory
     │
     ▼ (later, if superseded)
-mindr decisions reverse <id>
+mindragent decisions reverse <id>
     │
     ▼
 reversal marker stored

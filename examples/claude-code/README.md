@@ -7,9 +7,9 @@ Gives Claude Code persistent memory of your codebase via MCP.
 1. Install Mindr and initialise your project:
 
 ```bash
-npm install -g mindr
+npm install -g mindragent
 cd your-project
-mindr init
+mindragent init
 ```
 
 2. Copy `.claude/settings.json` from this directory into your project root (or merge with your existing one):
@@ -18,7 +18,7 @@ mindr init
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindr",
+      "command": "mindragent",
       "args": ["serve"]
     }
   }

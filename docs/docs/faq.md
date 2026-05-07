@@ -12,7 +12,7 @@ No. Bug pattern matches, debt warnings, and context health scores are all adviso
 
 ### Does Mindr send my source code anywhere?
 
-No. The post-commit hook runs locally. Mindr only stores the text content you give it — commit messages, `mindr remember` content, detected TODO/FIXME markers, and convention summary text. No source code is stored or transmitted.
+No. The post-commit hook runs locally. Mindr only stores the text content you give it — commit messages, `mindragent remember` content, detected TODO/FIXME markers, and convention summary text. No source code is stored or transmitted.
 
 ### Which agents does Mindr work with?
 
@@ -29,9 +29,9 @@ Any agent that supports the [Model Context Protocol](https://modelcontextprotoco
 You can start with SQLite and migrate later:
 
 ```bash
-mindr config set storage.backend remembr
-mindr config set remembr.base_url https://api.remembr.io
-mindr migrate sqlite-to-remembr
+mindragent config set storage.backend remembr
+mindragent config set remembr.base_url https://api.remembr.io
+mindragent migrate sqlite-to-remembr
 ```
 
 ### Can I back up my memories?
@@ -42,7 +42,7 @@ With SQLite, copy `.mindr/mindr.sqlite`. With Remembr, your data is stored in th
 
 ```bash
 rm .mindr/mindr.sqlite
-mindr init
+mindragent init
 ```
 
 Or with Remembr, use the Remembr dashboard to delete memories.
@@ -51,7 +51,7 @@ Or with Remembr, use the Remembr dashboard to delete memories.
 
 ### Does Mindr work without git?
 
-`mindr init` requires a git repository. The post-commit hook won't fire without git. You can still use the SDK and CLI manually to store memories, but automatic decision detection requires commits.
+`mindragent init` requires a git repository. The post-commit hook won't fire without git. You can still use the SDK and CLI manually to store memories, but automatic decision detection requires commits.
 
 ### What happens when I merge a branch?
 
@@ -63,10 +63,10 @@ No. Mindr uses lineage tags to track which branch a memory was written on. When 
 
 ### The post-commit hook isn't running. How do I fix it?
 
-Run `mindr status` to check if the hook is installed. If it shows "not installed", run:
+Run `mindragent status` to check if the hook is installed. If it shows "not installed", run:
 
 ```bash
-mindr init
+mindragent init
 ```
 
 `init` is idempotent — it won't overwrite your existing config, but it will reinstall the hook.
@@ -85,11 +85,11 @@ Mindr drops sections in priority order — warnings first, then hot modules, dec
 
 ### What is context health?
 
-Context health (0–100) measures how focused the current session is. Touching many modules, many files, or running for a long time all lower the score. A score below 40 means the session has drifted; start a fresh one with `mindr session checkpoint <id>`.
+Context health (0–100) measures how focused the current session is. Touching many modules, many files, or running for a long time all lower the score. A score below 40 means the session has drifted; start a fresh one with `mindragent session checkpoint <id>`.
 
 ### How does Mindr know what module a memory belongs to?
 
-Mindr infers modules from directory names. If a file in a commit lives under `src/auth/`, the module is tagged `auth`. You can override this with `--module` when using `mindr remember`.
+Mindr infers modules from directory names. If a file in a commit lives under `src/auth/`, the module is tagged `auth`. You can override this with `--module` when using `mindragent remember`.
 
 ## Decisions
 
@@ -110,13 +110,13 @@ Confidence is the sum of triggered weights, clamped to [0, 1]. Commits with conf
 Yes. To store a decision manually:
 
 ```bash
-mindr remember "Chose PostgreSQL over MongoDB for ACID guarantees" --type decision --module db
+mindragent remember "Chose PostgreSQL over MongoDB for ACID guarantees" --type decision --module db
 ```
 
 To mark an existing decision as reversed (superseded):
 
 ```bash
-mindr decisions reverse <decision-id>
+mindragent decisions reverse <decision-id>
 ```
 
 Reversed decisions still appear in `decisions list` but are struck through in the table.
@@ -130,7 +130,7 @@ In git diffs, on every commit. It scans for `TODO`, `FIXME`, `HACK`, `XXX`, and 
 ### How do I resolve debt?
 
 ```bash
-mindr debt resolve <debt-id>
+mindragent debt resolve <debt-id>
 ```
 
 This stores a `debt_resolved` marker. The original debt memory is not deleted — it remains for audit purposes.

@@ -82,7 +82,7 @@ context    — commit context (written by the post-commit hook)
 
 ## Config
 
-Create `.mindr/config.toml` in your project root, or run `mindr init`:
+Create `.mindr/config.toml` in your project root, or run `mindragent init`:
 
 ```toml
 [storage]
