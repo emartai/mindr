@@ -199,7 +199,7 @@ async function fetchRecentTask(listByType: ListByType): Promise<SessionContext['
   if (!latest) return null
   return {
     date: latest.createdAt.slice(0, 10),
-    summary: latest.content.replace(/^Commit\s+[a-f0-9]+:\s*/i, ''),
+    summary: latest.content.replace(/^Commit\s+\w+:\s*/i, ''),
     module: latest.tags.find((t) => t.key === 'module')?.value ?? 'root',
   }
 }

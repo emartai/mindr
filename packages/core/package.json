@@ -1,6 +1,6 @@
 {
   "name": "@ai-emart/mindr-core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Core internals for Mindr — git watcher, tree-sitter convention detection, memory storage, and session context for AI coding agents",
   "private": false,
   "type": "module",
