@@ -296,7 +296,7 @@ const health = await mindr.getContextHealth('session-abc');
 // { score: 72, recommendation: 'ok', breakdown: { ... } }
 ```
 
-Recommendations: `'ok'` (≥70), `'consider_checkpoint'` (40–69), `'recommend_fresh_session'` (<40).
+Recommendations: `'ok'` (≥70), `'consider_checkpoint'` (40–69), `'recommend_fresh_session'` (below 40).
 
 ---
 
