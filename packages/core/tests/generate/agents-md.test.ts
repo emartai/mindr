@@ -5,6 +5,7 @@ import { tmpdir } from 'os'
 import { simpleGit } from 'simple-git'
 import { generateAgentsMd, SIGNATURE, checkExistingFile } from '../../src/generate/agents-md.js'
 import { generateClaudeMd } from '../../src/generate/claude-md.js'
+import { generateGeminiMd } from '../../src/generate/gemini-md.js'
 import { onCommit } from '../../src/git/watcher.js'
 import { SqliteBackend } from '../../src/storage/sqlite-backend.js'
 import type { MindrMemory, MemoryBackend, MindrSession, StoreParams, SearchParams } from '../../src/storage/backend.js'
@@ -225,6 +226,27 @@ describe('generateClaudeMd — snapshot', () => {
   it('uses imperative convention language', async () => {
     const backend = new MockBackend([])
     const md = await generateClaudeMd('/mock/root', backend, { context: FIXTURE_CONTEXT })
+    expect(md).toContain('Use camelCase')
+  })
+})
+
+describe('generateGeminiMd — snapshot', () => {
+  it('renders GEMINI.md deterministically from fixed context', async () => {
+    const backend = new MockBackend([])
+    const md = await generateGeminiMd('/mock/root', backend, { context: FIXTURE_CONTEXT })
+    expect(md).toMatchSnapshot()
+  })
+
+  it('includes the ## Memory section', async () => {
+    const backend = new MockBackend([])
+    const md = await generateGeminiMd('/mock/root', backend, { context: FIXTURE_CONTEXT })
+    expect(md).toContain('## Memory')
+    expect(md).toContain('mindr generate gemini-md')
+  })
+
+  it('uses imperative convention language', async () => {
+    const backend = new MockBackend([])
+    const md = await generateGeminiMd('/mock/root', backend, { context: FIXTURE_CONTEXT })
     expect(md).toContain('Use camelCase')
   })
 })

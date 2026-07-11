@@ -21,6 +21,7 @@ mindr init                      # scan repo, install git hook, detect convention
 
 mindr generate agents-md        # auto-generate AGENTS.md from observed patterns
 mindr generate claude-md        # auto-generate CLAUDE.md
+mindr generate gemini-md        # auto-generate GEMINI.md
 
 mindr remember "We use tRPC for all internal APIs" --type decision
 mindr memory list
@@ -58,6 +59,7 @@ mindr session health             Context pollution score
 mindr stats                      Token savings report
 mindr generate agents-md         Generate AGENTS.md
 mindr generate claude-md         Generate CLAUDE.md
+mindr generate gemini-md         Generate GEMINI.md
 mindr serve                      Start MCP server
 mindr ui                         Open local dashboard (localhost:3131)
 mindr status                     Health check
