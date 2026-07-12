@@ -1,6 +1,6 @@
 {
   "name": "@emartai/mindr",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "TypeScript SDK for Mindr — persistent codebase memory for AI coding agents",
   "private": false,
   "type": "module",
