@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync, existsSync } from 'fs'
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'fs'
 import { join } from 'path'
 import type { Command } from 'commander'
 import {
@@ -61,6 +61,25 @@ async function gatherAnswers(): Promise<InitAnswers> {
   return { backendChoice, remembrUrl }
 }
 
+// Ensure an entry is present in the repo's .gitignore so Mindr's local SQLite
+// DB and config are never committed. Creates .gitignore if absent; appends only
+// when the entry isn't already there (trailing-slash-insensitive).
+function ensureGitignored(repoRoot: string, entry: string): void {
+  const gitignorePath = join(repoRoot, '.gitignore')
+  let content = ''
+  if (existsSync(gitignorePath)) {
+    content = readFileSync(gitignorePath, 'utf8')
+    const normalized = entry.replace(/\/$/, '')
+    const alreadyPresent = content
+      .split(/\r?\n/)
+      .map((l) => l.trim().replace(/\/$/, ''))
+      .includes(normalized)
+    if (alreadyPresent) return
+  }
+  const prefix = content.length > 0 && !content.endsWith('\n') ? '\n' : ''
+  writeFileSync(gitignorePath, `${content}${prefix}${entry}\n`, 'utf8')
+}
+
 export async function runInit(deps: InitDeps = {}): Promise<void> {
   const repoRoot =
     deps.repoRoot ?? (await getRepoRoot(process.cwd()).catch(() => null))
@@ -79,6 +98,8 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
   // Write config
   const mindrDir = join(repoRoot, '.mindr')
   mkdirSync(mindrDir, { recursive: true })
+  // Keep the local SQLite DB and config out of version control.
+  ensureGitignored(repoRoot, '.mindr/')
   const configPath = join(mindrDir, 'config.toml')
   writeFileSync(configPath, buildConfigToml(answers.backendChoice, answers.remembrUrl), 'utf8')
 

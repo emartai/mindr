@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { mkdirSync, rmSync, existsSync, readFileSync } from 'fs'
+import { mkdirSync, rmSync, existsSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
 import { execSync } from 'child_process'
@@ -71,6 +71,30 @@ describe('mindr init', () => {
     })
     const content = readFileSync(join(tmpDir, '.mindr', 'config.toml'), 'utf8')
     expect(content).toContain('sqlite')
+  })
+
+  it('adds .mindr/ to .gitignore', async () => {
+    await runInit({
+      repoRoot: tmpDir,
+      answers: { backendChoice: 'sqlite' },
+      backend: new MockBackend(),
+      skipScan: true,
+    })
+    const gitignore = readFileSync(join(tmpDir, '.gitignore'), 'utf8')
+    expect(gitignore).toContain('.mindr/')
+  })
+
+  it('preserves an existing .gitignore and does not duplicate .mindr/', async () => {
+    writeFileSync(join(tmpDir, '.gitignore'), 'node_modules\n.mindr/\n', 'utf8')
+    await runInit({
+      repoRoot: tmpDir,
+      answers: { backendChoice: 'sqlite' },
+      backend: new MockBackend(),
+      skipScan: true,
+    })
+    const gitignore = readFileSync(join(tmpDir, '.gitignore'), 'utf8')
+    expect(gitignore).toContain('node_modules')
+    expect((gitignore.match(/\.mindr\//g) ?? []).length).toBe(1)
   })
 
   it('throws when not a git repo', async () => {
