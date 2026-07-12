@@ -6,8 +6,8 @@ Mindr is a TypeScript monorepo with three published packages:
 
 | Package | npm name | Role |
 |---------|----------|------|
-| `packages/core` | `@ai-emart/mindr-core` | Storage, git integration, analysis, context |
-| `packages/sdk` | `@ai-emart/mindr` | Clean TypeScript API wrapping core |
+| `packages/core` | `@emartai/mindr-core` | Storage, git integration, analysis, context |
+| `packages/sdk` | `@emartai/mindr` | Clean TypeScript API wrapping core |
 | `packages/cli` | `mindragent` | CLI commands + MCP server + local UI |
 
 The CLI and SDK both depend on core. They never depend on each other.

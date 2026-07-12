@@ -22,8 +22,8 @@ pnpm lint
 
 | Package | Name | Purpose |
 |---------|------|---------|
-| `packages/core` | `@ai-emart/mindr-core` | Shared logic — Remembr client wrapper, schema, tree-sitter, git |
-| `packages/sdk` | `@ai-emart/mindr` | Public TypeScript SDK |
+| `packages/core` | `@emartai/mindr-core` | Shared logic — Remembr client wrapper, schema, tree-sitter, git |
+| `packages/sdk` | `@emartai/mindr` | Public TypeScript SDK |
 | `packages/cli` | `mindr` | CLI binary + MCP server |
 
 ## Rules

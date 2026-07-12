@@ -1,5 +1,5 @@
 {
-  "name": "@ai-emart/mindr",
+  "name": "@emartai/mindr",
   "version": "1.1.0",
   "description": "TypeScript SDK for Mindr — persistent codebase memory for AI coding agents",
   "private": false,
@@ -14,14 +14,14 @@
   },
   "keywords": ["ai", "memory", "agents", "mcp", "codebase", "typescript"],
   "license": "MIT",
-  "author": "ai-emart",
+  "author": "emartai",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ai-emart/mindr.git"
+    "url": "git+https://github.com/emartai/mindr.git"
   },
-  "homepage": "https://github.com/ai-emart/mindr",
+  "homepage": "https://github.com/emartai/mindr",
   "bugs": {
-    "url": "https://github.com/ai-emart/mindr/issues"
+    "url": "https://github.com/emartai/mindr/issues"
   },
   "engines": {
     "node": ">=22"
@@ -38,7 +38,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@ai-emart/mindr-core": "workspace:*",
+    "@emartai/mindr-core": "workspace:*",
     "@remembr/sdk": "^0.2.0"
   }
 }

@@ -5,7 +5,7 @@
 AI coding agents are stateless by default — every session starts from zero, re-learning the same codebase, repeating the same mistakes. Mindr fixes this with a git-aware, tree-sitter-powered memory layer that works with Claude Code, Codex, Cursor, Aider, OpenCode, and any MCP-compatible agent.
 
 [![npm](https://img.shields.io/npm/v/mindr)](https://www.npmjs.com/package/mindr)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/ai-emart/mindr/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/emartai/mindr/blob/main/LICENSE)
 
 ## Install
 
@@ -68,7 +68,7 @@ mindragent config set <key> <value>   Write config value
 
 ## Documentation
 
-Full docs, integration guides, and SDK reference: [github.com/ai-emart/mindr](https://github.com/ai-emart/mindr)
+Full docs, integration guides, and SDK reference: [github.com/emartai/mindr](https://github.com/emartai/mindr)
 
 ## License
 

@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
 import type { Command } from 'commander'
-import { getRepoRoot, loadConfig, getBackend, MEMORY_TYPES } from '@ai-emart/mindr-core'
-import type { MemoryBackend, MindrConfig } from '@ai-emart/mindr-core'
+import { getRepoRoot, loadConfig, getBackend, MEMORY_TYPES } from '@emartai/mindr-core'
+import type { MemoryBackend, MindrConfig } from '@emartai/mindr-core'
 import chalk from 'chalk'
 
 const HOOK_MARKER = '# >>> mindr-begin <<<'

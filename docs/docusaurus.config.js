@@ -127,9 +127,9 @@ function requireResolveWeakFix() {
 
 module.exports = {
   title: 'Mindr',
-  url: 'https://ai-emart.github.io',
+  url: 'https://emartai.github.io',
   baseUrl: '/mindr/',
-  organizationName: 'ai-emart',
+  organizationName: 'emartai',
   projectName: 'mindr',
   presets: [['classic', { docs: { routeBasePath: '/', sidebarPath: './sidebars.js' }, blog: false }]],
   plugins: [requireResolveWeakFix],

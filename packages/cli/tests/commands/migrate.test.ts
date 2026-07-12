@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Command } from 'commander'
 import { addMigrateCommands, runMigrateSqliteToRemembr } from '../../src/commands/migrate.js'
 import { captureStdout } from '../helpers/mock-backend.js'
-import type { MindrConfig } from '@ai-emart/mindr-core'
+import type { MindrConfig } from '@emartai/mindr-core'
 
 const remembrConfig: MindrConfig = {
   storage: { backend: 'remembr', sqlite_path: '.mindr/mindr.sqlite' },

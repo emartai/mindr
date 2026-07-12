@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import type { Command } from 'commander'
 import { parse as tomlParse, stringify as tomlStringify } from '@iarna/toml'
-import { getRepoRoot } from '@ai-emart/mindr-core'
+import { getRepoRoot } from '@emartai/mindr-core'
 import chalk from 'chalk'
 
 export interface ConfigDeps {

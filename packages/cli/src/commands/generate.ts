@@ -11,7 +11,7 @@ import {
   AGENTS_MD_SIGNATURE,
   OverwriteError,
   checkExistingFile,
-} from '@ai-emart/mindr-core'
+} from '@emartai/mindr-core'
 
 // ---------------------------------------------------------------------------
 // ANSI helpers — no external dep

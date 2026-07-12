@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
-import { getRepoRoot, loadConfig, migrateSqliteToRemembr, SqliteBackend } from '@ai-emart/mindr-core'
-import type { MindrConfig } from '@ai-emart/mindr-core'
+import { getRepoRoot, loadConfig, migrateSqliteToRemembr, SqliteBackend } from '@emartai/mindr-core'
+import type { MindrConfig } from '@emartai/mindr-core'
 import chalk from 'chalk'
 
 export interface MigrateDeps {

@@ -6,8 +6,8 @@ import {
   getBackend,
   installPostCommitHook,
   detect,
-} from '@ai-emart/mindr-core'
-import type { MemoryBackend, MindrConfig } from '@ai-emart/mindr-core'
+} from '@emartai/mindr-core'
+import type { MemoryBackend, MindrConfig } from '@emartai/mindr-core'
 import chalk from 'chalk'
 
 type BackendChoice = 'sqlite' | 'remembr'

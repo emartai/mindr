@@ -1,5 +1,5 @@
 /**
- * @ai-emart/mindr — developer SDK
+ * @emartai/mindr — developer SDK
  *
  * Wraps the core MemoryBackend with a clean, typed API.
  * Does NOT depend on the CLI package.
@@ -22,7 +22,7 @@ import {
   generateClaudeMd as coreGenerateClaudeMd,
   MEMORY_TYPES,
   migrateSqliteToRemembr as coreMigrate,
-} from '@ai-emart/mindr-core'
+} from '@emartai/mindr-core'
 import type {
   MemoryBackend,
   MindrMemory,
@@ -36,7 +36,7 @@ import type {
   MindrStats,
   ContextHealthResult,
   QualityBreakdown,
-} from '@ai-emart/mindr-core'
+} from '@emartai/mindr-core'
 
 // ---------------------------------------------------------------------------
 // Re-exports — types consumers need without importing core directly

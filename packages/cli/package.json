@@ -17,14 +17,14 @@
   },
   "keywords": ["ai", "memory", "agents", "codex", "claude-code", "mcp", "cursor", "aider", "codebase", "git", "tree-sitter"],
   "license": "MIT",
-  "author": "ai-emart",
+  "author": "emartai",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ai-emart/mindr.git"
+    "url": "git+https://github.com/emartai/mindr.git"
   },
-  "homepage": "https://github.com/ai-emart/mindr",
+  "homepage": "https://github.com/emartai/mindr",
   "bugs": {
-    "url": "https://github.com/ai-emart/mindr/issues"
+    "url": "https://github.com/emartai/mindr/issues"
   },
   "engines": {
     "node": ">=22"
@@ -42,8 +42,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@ai-emart/mindr": "workspace:*",
-    "@ai-emart/mindr-core": "workspace:*",
+    "@emartai/mindr": "workspace:*",
+    "@emartai/mindr-core": "workspace:*",
     "@iarna/toml": "^2.2.5",
     "@inquirer/prompts": "^7.4.0",
     "@modelcontextprotocol/sdk": "^1.29.0",

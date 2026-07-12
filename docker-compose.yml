@@ -98,7 +98,7 @@ services:
   #   base_url = "http://localhost:8000/api/v1"
   # ---------------------------------------------------------------------------
   remembr:
-    image: ghcr.io/ai-emart/remembr:latest
+    image: ghcr.io/emartai/remembr:latest
     container_name: mindr-remembr
     profiles: ["remembr"]
     ports:

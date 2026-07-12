@@ -1,5 +1,5 @@
 import type { Command } from 'commander'
-import { getBackend, getRepoRoot, loadConfig } from '@ai-emart/mindr-core'
+import { getBackend, getRepoRoot, loadConfig } from '@emartai/mindr-core'
 import { createUiServer } from '../ui/server.js'
 
 export function addUiCommand(program: Command): void {

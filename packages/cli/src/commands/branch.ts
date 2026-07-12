@@ -1,7 +1,7 @@
 import type { Command } from 'commander'
 import { simpleGit } from 'simple-git'
-import { reachableCommits, getRepoRoot, loadConfig, getBackend } from '@ai-emart/mindr-core'
-import type { MemoryBackend } from '@ai-emart/mindr-core'
+import { reachableCommits, getRepoRoot, loadConfig, getBackend } from '@emartai/mindr-core'
+import type { MemoryBackend } from '@emartai/mindr-core'
 
 export interface BranchDeps {
   backend?: MemoryBackend

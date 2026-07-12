@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
-import { checkpointSession, getBackend, getContextHealth, getRepoRoot, loadConfig } from '@ai-emart/mindr-core'
-import type { MemoryBackend } from '@ai-emart/mindr-core'
+import { checkpointSession, getBackend, getContextHealth, getRepoRoot, loadConfig } from '@emartai/mindr-core'
+import type { MemoryBackend } from '@emartai/mindr-core'
 
 export interface SessionDeps { backend?: MemoryBackend }
 

@@ -1,5 +1,5 @@
 import type { Command } from 'commander'
-import { getRepoRoot, loadConfig, getBackend, onCommit } from '@ai-emart/mindr-core'
+import { getRepoRoot, loadConfig, getBackend, onCommit } from '@emartai/mindr-core'
 
 export function addInternalCommands(program: Command): void {
   const internal = program.command('internal')

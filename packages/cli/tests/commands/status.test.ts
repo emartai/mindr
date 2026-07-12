@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Command } from 'commander'
 import { addStatusCommand } from '../../src/commands/status.js'
 import { MockBackend, captureStdout } from '../helpers/mock-backend.js'
-import type { MindrMemory, MindrConfig } from '@ai-emart/mindr-core'
+import type { MindrMemory, MindrConfig } from '@emartai/mindr-core'
 
 const config: MindrConfig = {
   storage: { backend: 'sqlite', sqlite_path: '.mindr/mindr.sqlite' },

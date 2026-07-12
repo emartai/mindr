@@ -1,13 +1,13 @@
 # SDK Reference
 
 ```bash
-npm install @ai-emart/mindr
+npm install @emartai/mindr
 ```
 
-The SDK provides a typed TypeScript API for programmatic access to Mindr. It wraps `@ai-emart/mindr-core` without depending on the CLI.
+The SDK provides a typed TypeScript API for programmatic access to Mindr. It wraps `@emartai/mindr-core` without depending on the CLI.
 
 ```ts
-import { Mindr } from '@ai-emart/mindr';
+import { Mindr } from '@emartai/mindr';
 
 const mindr = await Mindr.open({ project: './my-project' });
 // ... use the API ...
@@ -380,7 +380,7 @@ Requires the config to already have `storage.backend = "remembr"` and valid Reme
 Exported constant listing all valid memory type strings.
 
 ```ts
-import { MEMORY_TYPES } from '@ai-emart/mindr';
+import { MEMORY_TYPES } from '@emartai/mindr';
 // ['decision', 'convention', 'bug_pattern', 'debt', 'debt_resolved', 'session_checkpoint', 'note', 'context']
 ```
 
@@ -389,7 +389,7 @@ import { MEMORY_TYPES } from '@ai-emart/mindr';
 ## Full example
 
 ```ts
-import { Mindr } from '@ai-emart/mindr';
+import { Mindr } from '@emartai/mindr';
 
 const mindr = await Mindr.open({ project: '.' });
 

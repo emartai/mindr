@@ -39,7 +39,7 @@ When you push a version tag (e.g., `v1.0.0`), the `.github/workflows/release.yml
 
 1. **Runs full test suite** on all three OS platforms (Ubuntu, macOS, Windows)
 2. **Publishes CLI package** to npm (`mindr`)
-3. **Publishes SDK package** to npm (`@ai-emart/mindr`)
+3. **Publishes SDK package** to npm (`@emartai/mindr`)
 4. **Creates a GitHub Release** with auto-generated release notes
 
 The release is only created if all tests pass on all platforms.

@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
-import { getRepoRoot, loadConfig, getBackend } from '@ai-emart/mindr-core'
-import type { MemoryBackend } from '@ai-emart/mindr-core'
+import { getRepoRoot, loadConfig, getBackend } from '@emartai/mindr-core'
+import type { MemoryBackend } from '@emartai/mindr-core'
 import chalk from 'chalk'
 
 export interface ForgetDeps {

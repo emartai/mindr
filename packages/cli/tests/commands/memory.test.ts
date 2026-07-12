@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Command } from 'commander'
 import { addMemoryCommands } from '../../src/commands/memory.js'
 import { MockBackend, captureStdout } from '../helpers/mock-backend.js'
-import type { MindrMemory } from '@ai-emart/mindr-core'
+import type { MindrMemory } from '@emartai/mindr-core'
 
 function mem(id: string, type: string, module: string): MindrMemory {
   return {

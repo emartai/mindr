@@ -2,7 +2,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { MemoryBackend } from '@ai-emart/mindr-core'
+import type { MemoryBackend } from '@emartai/mindr-core'
 
 export interface UiServerOptions {
   backend: MemoryBackend

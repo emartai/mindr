@@ -4,12 +4,12 @@
 
 AI coding agents are stateless by default — every session starts from zero, re-learning the same codebase, repeating the same mistakes. Mindr fixes this. It gives every agent — Claude Code, Codex, OpenCode, Cursor, Aider — a persistent, structured memory of your codebase that compounds over time.
 
-[![CI](https://github.com/ai-emart/mindr/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-emart/mindr/actions/workflows/ci.yml)
+[![CI](https://github.com/emartai/mindr/actions/workflows/ci.yml/badge.svg)](https://github.com/emartai/mindr/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/mindragent)](https://www.npmjs.com/package/mindragent)
-[![npm version](https://img.shields.io/npm/v/@ai-emart/mindr)](https://www.npmjs.com/package/@ai-emart/mindr)
+[![npm version](https://img.shields.io/npm/v/@emartai/mindr)](https://www.npmjs.com/package/@emartai/mindr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **Note on naming.** Mindr is the product name. The CLI binary on npm is `mindragent` (the name `mindr` was already taken). The npm SDK package is still `@ai-emart/mindr`. MCP tool names like `mindr:get_context` are protocol identifiers and remain unchanged.
+> **Note on naming.** Mindr is the product name. The CLI binary on npm is `mindragent` (the name `mindr` was already taken). The npm SDK package is still `@emartai/mindr`. MCP tool names like `mindr:get_context` are protocol identifiers and remain unchanged.
 [![Node](https://img.shields.io/node/v/mindragent)](https://www.npmjs.com/package/mindragent)
 
 ---
@@ -91,11 +91,11 @@ command = "mindragent serve"
 ## TypeScript SDK
 
 ```bash
-npm install @ai-emart/mindr
+npm install @emartai/mindr
 ```
 
 ```ts
-import { Mindr } from '@ai-emart/mindr';
+import { Mindr } from '@emartai/mindr';
 
 const mindr = await Mindr.open({ project: './my-project' });
 
@@ -113,12 +113,12 @@ mindr.close();
 ## Links
 
 - [Documentation](https://mindr.dev)
-- [GitHub](https://github.com/ai-emart/mindr)
-- [GitHub Sponsors](https://github.com/sponsors/ai-emart)
+- [GitHub](https://github.com/emartai/mindr)
+- [GitHub Sponsors](https://github.com/sponsors/emartai)
 - [Discord](https://discord.gg/mindr)
 
 ---
 
 ## License
 
-[MIT](LICENSE) © 2026 ai-emart
+[MIT](LICENSE) © 2026 emartai
