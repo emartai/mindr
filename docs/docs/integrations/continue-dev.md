@@ -7,7 +7,7 @@ Mindr integrates with Continue (the open-source AI coding assistant) via MCP.
 **1. Install Mindr:**
 
 ```bash
-npm install -g mindr
+npm install -g mindragent
 ```
 
 **2. Initialize Mindr in your project:**
