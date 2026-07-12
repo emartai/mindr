@@ -67,6 +67,12 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
   if (!repoRoot) {
     throw new Error('Not a git repository. Run git init first.')
   }
+  // Explicitly verify this is a git repo even when repoRoot was supplied
+  // directly — the hook installer no longer fails on a missing .git, so init
+  // must guard the non-git case itself.
+  if (!existsSync(join(repoRoot, '.git'))) {
+    throw new Error('Not a git repository. Run git init first.')
+  }
 
   const answers = deps.answers ?? (await gatherAnswers())
 
@@ -76,8 +82,9 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
   const configPath = join(mindrDir, 'config.toml')
   writeFileSync(configPath, buildConfigToml(answers.backendChoice, answers.remembrUrl), 'utf8')
 
-  // Install hook — idempotent, installPostCommitHook guards against double-install
-  installPostCommitHook(repoRoot)
+  // Install hook — idempotent, installPostCommitHook guards against double-install.
+  // Returns the real path written (honors core.hooksPath).
+  const installedHookPath = installPostCommitHook(repoRoot)
 
   // First convention scan (non-fatal)
   if (!deps.skipScan) {
@@ -108,7 +115,6 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
     }
   }
 
-  const hookPath = join(repoRoot, '.git', 'hooks', 'post-commit')
   const alreadyExists = existsSync(configPath)
   process.stdout.write(
     [
@@ -117,7 +123,7 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
       '',
       `  ${chalk.cyan('Backend:')} ${answers.backendChoice}`,
       `  ${chalk.cyan('Config:')}  ${configPath}`,
-      `  ${chalk.cyan('Hook:')}    ${hookPath}`,
+      `  ${chalk.cyan('Hook:')}    ${installedHookPath}`,
       '',
     ].join('\n'),
   )
