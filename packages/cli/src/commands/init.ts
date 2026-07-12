@@ -67,6 +67,12 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
   if (!repoRoot) {
     throw new Error('Not a git repository. Run git init first.')
   }
+  // Explicitly verify this is a git repo even when repoRoot was supplied
+  // directly — the hook installer no longer fails on a missing .git, so init
+  // must guard the non-git case itself.
+  if (!existsSync(join(repoRoot, '.git'))) {
+    throw new Error('Not a git repository. Run git init first.')
+  }
 
   const answers = deps.answers ?? (await gatherAnswers())
 
