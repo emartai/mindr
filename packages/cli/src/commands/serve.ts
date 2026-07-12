@@ -1,5 +1,5 @@
 import type { Command } from 'commander'
-import { getRepoRoot, loadConfig, getBackend } from '@ai-emart/mindr-core'
+import { getRepoRoot, loadConfig, getBackend } from '@emartai/mindr-core'
 import { createMindrServer } from '../mcp/server.js'
 
 export function addServeCommands(program: Command): void {

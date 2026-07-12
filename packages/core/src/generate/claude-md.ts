@@ -161,7 +161,7 @@ export async function generateClaudeMd(
   lines.push('## Memory')
   lines.push('')
   lines.push(
-    'This file is maintained by **[Mindr](https://github.com/ai-emart/mindr)**, ' +
+    'This file is maintained by **[Mindr](https://github.com/emartai/mindr)**, ' +
     'which observes your commits and learns your codebase conventions automatically.',
   )
   lines.push('')

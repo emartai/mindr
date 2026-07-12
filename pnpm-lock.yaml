@@ -45,10 +45,10 @@ importers:
 
   packages/cli:
     dependencies:
-      '@ai-emart/mindr':
+      '@emartai/mindr':
         specifier: workspace:*
         version: link:../sdk
-      '@ai-emart/mindr-core':
+      '@emartai/mindr-core':
         specifier: workspace:*
         version: link:../core
       '@iarna/toml':
@@ -115,7 +115,7 @@ importers:
 
   packages/sdk:
     dependencies:
-      '@ai-emart/mindr-core':
+      '@emartai/mindr-core':
         specifier: workspace:*
         version: link:../core
       '@remembr/sdk':

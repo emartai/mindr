@@ -3,7 +3,7 @@ import { Command } from 'commander'
 import chalk from 'chalk'
 import { addDecisionsCommands, runDecisionsReverse } from '../../src/commands/decisions.js'
 import { MockBackend, captureStdout } from '../helpers/mock-backend.js'
-import type { MindrMemory } from '@ai-emart/mindr-core'
+import type { MindrMemory } from '@emartai/mindr-core'
 
 function makeDecision(
   id: string,

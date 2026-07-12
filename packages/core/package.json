@@ -1,5 +1,5 @@
 {
-  "name": "@ai-emart/mindr-core",
+  "name": "@emartai/mindr-core",
   "version": "1.1.0",
   "description": "Core internals for Mindr — git watcher, tree-sitter convention detection, memory storage, and session context for AI coding agents",
   "private": false,
@@ -14,12 +14,12 @@
   },
   "keywords": ["mindr", "ai", "coding-agent", "memory", "codebase", "mcp", "tree-sitter", "git"],
   "license": "MIT",
-  "author": "ai-emart",
+  "author": "emartai",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ai-emart/mindr"
+    "url": "https://github.com/emartai/mindr"
   },
-  "homepage": "https://github.com/ai-emart/mindr#readme",
+  "homepage": "https://github.com/emartai/mindr#readme",
   "engines": {
     "node": ">=18"
   },

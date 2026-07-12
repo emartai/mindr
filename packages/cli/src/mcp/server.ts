@@ -2,7 +2,7 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server'
 import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js'
-import type { MemoryBackend } from '@ai-emart/mindr-core'
+import type { MemoryBackend } from '@emartai/mindr-core'
 import {
   buildSessionContext,
   checkForBugPatterns,
@@ -12,7 +12,7 @@ import {
   queryDebt,
   queryConventions,
   scoreContextHealth,
-} from '@ai-emart/mindr-core'
+} from '@emartai/mindr-core'
 
 // ---------------------------------------------------------------------------
 // Tool definitions (JSON Schema)

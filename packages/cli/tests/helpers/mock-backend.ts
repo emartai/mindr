@@ -4,8 +4,8 @@ import type {
   MindrSession,
   StoreParams,
   SearchParams,
-} from '@ai-emart/mindr-core'
-import type { MindrTag } from '@ai-emart/mindr-core'
+} from '@emartai/mindr-core'
+import type { MindrTag } from '@emartai/mindr-core'
 
 export class MockBackend implements MemoryBackend {
   readonly stored: MindrMemory[] = []

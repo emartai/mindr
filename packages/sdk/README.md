@@ -1,19 +1,19 @@
-# @ai-emart/mindr
+# @emartai/mindr
 
-The developer SDK for [Mindr](https://github.com/ai-emart/mindr) — memory-augmented dev tooling.
+The developer SDK for [Mindr](https://github.com/emartai/mindr) — memory-augmented dev tooling.
 Store architectural decisions, coding conventions, and tech debt in a local or cloud backend,
 then surface them to any AI agent as a structured session context.
 
 ## Install
 
 ```
-npm i @ai-emart/mindr
+npm i @emartai/mindr
 ```
 
 ## Quickstart
 
 ```ts
-import { Mindr } from '@ai-emart/mindr';
+import { Mindr } from '@emartai/mindr';
 
 const mindr = await Mindr.open({ project: './my-project' });
 

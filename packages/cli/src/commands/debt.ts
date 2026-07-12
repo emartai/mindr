@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
-import { debtTags, getBackend, getRepoRoot, loadConfig } from '@ai-emart/mindr-core'
-import type { DebtSeverity, MemoryBackend } from '@ai-emart/mindr-core'
+import { debtTags, getBackend, getRepoRoot, loadConfig } from '@emartai/mindr-core'
+import type { DebtSeverity, MemoryBackend } from '@emartai/mindr-core'
 import Table from 'cli-table3'
 
 export interface DebtDeps { backend?: MemoryBackend }

@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { Client } from '@modelcontextprotocol/sdk/client'
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
 import { createMindrServer } from '../../src/mcp/server.js'
-import type { MemoryBackend, MindrMemory, MindrSession, StoreParams, SearchParams } from '@ai-emart/mindr-core'
-import type { MindrTag } from '@ai-emart/mindr-core'
+import type { MemoryBackend, MindrMemory, MindrSession, StoreParams, SearchParams } from '@emartai/mindr-core'
+import type { MindrTag } from '@emartai/mindr-core'
 
 // ---------------------------------------------------------------------------
 // Mock backend

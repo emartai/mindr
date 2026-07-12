@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { Command } from 'commander'
 import { addStatsCommand } from '../../src/commands/stats.js'
 import { MockBackend, captureStdout } from '../helpers/mock-backend.js'
-import type { MindrMemory } from '@ai-emart/mindr-core'
+import type { MindrMemory } from '@emartai/mindr-core'
 
 function metering(id: string, createdAt: string, tokensInjected: number): MindrMemory {
   return {

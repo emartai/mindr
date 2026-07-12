@@ -13,8 +13,8 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm --filter @ai-emart/mindr-core build \
-  && pnpm --filter @ai-emart/mindr build \
+RUN pnpm --filter @emartai/mindr-core build \
+  && pnpm --filter @emartai/mindr build \
   && pnpm --filter mindr build
 
 FROM node:22-bookworm-slim

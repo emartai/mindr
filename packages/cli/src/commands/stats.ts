@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
-import { getBackend, getRepoRoot, loadConfig } from '@ai-emart/mindr-core'
-import type { MemoryBackend } from '@ai-emart/mindr-core'
+import { getBackend, getRepoRoot, loadConfig } from '@emartai/mindr-core'
+import type { MemoryBackend } from '@emartai/mindr-core'
 
 export interface StatsDeps { backend?: MemoryBackend }
 
