@@ -3,7 +3,7 @@
 Install the CLI globally:
 
 ```bash
-npm install -g mindr
+npm install -g mindragent
 ```
 
 The binary is `mindr`. All commands discover the project root by walking up from `cwd` to find `.mindr/config.toml`.

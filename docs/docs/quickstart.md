@@ -8,7 +8,7 @@
 ## Install
 
 ```bash
-npm install -g mindr
+npm install -g mindragent
 ```
 
 ## Initialize Mindr

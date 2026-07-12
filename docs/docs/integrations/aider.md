@@ -7,7 +7,7 @@ Mindr integrates with Aider via MCP. Aider's MCP support requires a bridge; the 
 **1. Install Mindr:**
 
 ```bash
-npm install -g mindr
+npm install -g mindragent
 ```
 
 **2. Initialize Mindr in your project:**
