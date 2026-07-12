@@ -321,17 +321,20 @@ function parseGoModules(text: string): string[] {
 
 export function detectStack(repoRoot: string): StackItem[] {
   const deps = new Set<string>()
+  const langs = new Set<string>()
 
   for (const manifest of findManifests(repoRoot)) {
     const base = basename(manifest)
 
     if (base === 'package.json') {
+      langs.add('javascript')
       const pkg = readJsonSafe(manifest)
       if (pkg) {
         for (const k of Object.keys((pkg['dependencies'] as Record<string, unknown>) ?? {})) deps.add(k)
         for (const k of Object.keys((pkg['devDependencies'] as Record<string, unknown>) ?? {})) deps.add(k)
       }
     } else if (base === 'pyproject.toml') {
+      langs.add('python')
       const py = readTomlSafe(manifest)
       if (py) {
         const projDeps = (py['project'] as Record<string, unknown> | undefined)?.['dependencies']
@@ -343,6 +346,7 @@ export function detectStack(repoRoot: string): StackItem[] {
         if (poetryDeps) for (const k of Object.keys(poetryDeps)) deps.add(k.toLowerCase())
       }
     } else if (/^requirements.*\.txt$/i.test(base)) {
+      langs.add('python')
       const txt = readFileSafe(manifest)
       if (txt) {
         for (const line of txt.split(/\r?\n/)) {
@@ -352,6 +356,7 @@ export function detectStack(repoRoot: string): StackItem[] {
         }
       }
     } else if (base === 'go.mod') {
+      langs.add('go')
       const txt = readFileSafe(manifest)
       if (txt) {
         for (const mod of parseGoModules(txt)) {
@@ -359,6 +364,7 @@ export function detectStack(repoRoot: string): StackItem[] {
         }
       }
     } else if (base === 'Cargo.toml') {
+      langs.add('rust')
       const cargo = readTomlSafe(manifest)
       const cdeps = cargo?.['dependencies'] as Record<string, unknown> | undefined
       if (cdeps) for (const k of Object.keys(cdeps)) deps.add(k.toLowerCase())
@@ -366,9 +372,31 @@ export function detectStack(repoRoot: string): StackItem[] {
   }
 
   if (existsSync(join(repoRoot, 'tsconfig.json'))) deps.add('typescript')
+  // TypeScript supersedes the bare JavaScript marker when TS is present.
+  if (deps.has('typescript')) {
+    langs.delete('javascript')
+    langs.add('typescript')
+  }
 
   const seen = new Set<string>()
   const items: StackItem[] = []
+
+  // Emit the detected languages first, based on which manifests are present.
+  const LANGUAGE_NAMES: Record<string, string> = {
+    typescript: 'TypeScript',
+    javascript: 'JavaScript',
+    python: 'Python',
+    go: 'Go',
+    rust: 'Rust',
+  }
+  for (const lang of langs) {
+    const name = LANGUAGE_NAMES[lang]
+    if (name && !seen.has(name)) {
+      seen.add(name)
+      items.push({ name, role: 'language', category: 'language' })
+    }
+  }
+
   for (const dep of deps) {
     const known = KNOWN_DEPS[dep]
     if (known && !seen.has(known.name)) {

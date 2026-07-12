@@ -31,6 +31,7 @@ describe('detectStack', () => {
       ].join('\n'),
     )
     const names = detectStack(dir).map((s) => s.name)
+    expect(names).toContain('Python') // language marker
     expect(names).toContain('FastAPI')
     expect(names).toContain('Uvicorn')
     expect(names).toContain('SQLAlchemy')
@@ -53,6 +54,7 @@ describe('detectStack', () => {
       JSON.stringify({ dependencies: { express: '^4', pg: '^8' }, devDependencies: { vitest: '^2' } }),
     )
     const names = detectStack(dir).map((s) => s.name)
+    expect(names).toContain('JavaScript') // language marker (no tsconfig)
     expect(names).toContain('Express')
     expect(names).toContain('PostgreSQL')
     expect(names).toContain('Vitest')
