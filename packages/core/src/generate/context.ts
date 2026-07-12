@@ -1,7 +1,7 @@
 // Shared data types and gatherers for all generator targets.
 
-import { readFileSync, existsSync } from 'fs'
-import { join } from 'path'
+import { readFileSync, existsSync, readdirSync, type Dirent } from 'fs'
+import { join, basename } from 'path'
 import { parse as parseTOML } from '@iarna/toml'
 import { simpleGit } from 'simple-git'
 import type { MemoryBackend, MindrMemory } from '../storage/backend.js'
@@ -95,6 +95,59 @@ const KNOWN_DEPS: Record<string, KnownDep> = {
   '@auth/core':         { name: 'Auth.js',            role: 'authentication',            category: 'tooling'    },
   // Queue
   bullmq:               { name: 'BullMQ',             role: 'job queue',                 category: 'tooling'    },
+
+  // --- Python ---
+  fastapi:              { name: 'FastAPI',            role: 'web framework',             category: 'framework'  },
+  django:               { name: 'Django',             role: 'web framework',             category: 'framework'  },
+  flask:                { name: 'Flask',              role: 'web framework',             category: 'framework'  },
+  starlette:            { name: 'Starlette',          role: 'ASGI framework',            category: 'framework'  },
+  aiohttp:              { name: 'aiohttp',            role: 'async HTTP framework',      category: 'framework'  },
+  uvicorn:              { name: 'Uvicorn',            role: 'ASGI server',               category: 'tooling'    },
+  gunicorn:             { name: 'Gunicorn',           role: 'WSGI server',               category: 'tooling'    },
+  celery:               { name: 'Celery',             role: 'task queue',                category: 'tooling'    },
+  sqlalchemy:           { name: 'SQLAlchemy',         role: 'ORM',                       category: 'database'   },
+  alembic:              { name: 'Alembic',            role: 'DB migrations',             category: 'database'   },
+  psycopg2:             { name: 'PostgreSQL',         role: 'database driver',           category: 'database'   },
+  'psycopg2-binary':    { name: 'PostgreSQL',         role: 'database driver',           category: 'database'   },
+  psycopg:              { name: 'PostgreSQL',         role: 'database driver',           category: 'database'   },
+  asyncpg:              { name: 'PostgreSQL',         role: 'async database driver',     category: 'database'   },
+  pgvector:             { name: 'pgvector',           role: 'vector search',             category: 'database'   },
+  pymongo:              { name: 'MongoDB',            role: 'database driver',           category: 'database'   },
+  motor:                { name: 'MongoDB',            role: 'async database driver',     category: 'database'   },
+  redis:                { name: 'Redis',              role: 'cache / pub-sub',           category: 'database'   },
+  pydantic:             { name: 'Pydantic',           role: 'data validation',           category: 'tooling'    },
+  'pydantic-settings':  { name: 'Pydantic Settings',  role: 'config management',         category: 'tooling'    },
+  pytest:               { name: 'pytest',             role: 'test runner',               category: 'testing'    },
+  numpy:                { name: 'NumPy',              role: 'numerical computing',       category: 'tooling'    },
+  pandas:               { name: 'pandas',             role: 'data analysis',             category: 'tooling'    },
+  'scikit-learn':       { name: 'scikit-learn',       role: 'machine learning',          category: 'framework'  },
+  torch:                { name: 'PyTorch',            role: 'deep learning',             category: 'framework'  },
+  tensorflow:           { name: 'TensorFlow',         role: 'deep learning',             category: 'framework'  },
+  transformers:         { name: 'Transformers',       role: 'ML models',                 category: 'framework'  },
+  'sentence-transformers': { name: 'Sentence Transformers', role: 'text embeddings',     category: 'tooling'    },
+  langchain:            { name: 'LangChain',          role: 'LLM framework',             category: 'framework'  },
+  'llama-index':        { name: 'LlamaIndex',         role: 'LLM framework',             category: 'framework'  },
+  openai:               { name: 'OpenAI',             role: 'LLM client',                category: 'tooling'    },
+  anthropic:            { name: 'Anthropic',          role: 'LLM client',                category: 'tooling'    },
+  httpx:                { name: 'HTTPX',              role: 'HTTP client',               category: 'tooling'    },
+  requests:             { name: 'Requests',           role: 'HTTP client',               category: 'tooling'    },
+
+  // --- Rust (Cargo crate names) ---
+  axum:                 { name: 'Axum',               role: 'web framework',             category: 'framework'  },
+  'actix-web':          { name: 'Actix Web',          role: 'web framework',             category: 'framework'  },
+  rocket:               { name: 'Rocket',             role: 'web framework',             category: 'framework'  },
+  warp:                 { name: 'Warp',               role: 'web framework',             category: 'framework'  },
+  tokio:                { name: 'Tokio',              role: 'async runtime',             category: 'tooling'    },
+  sqlx:                 { name: 'SQLx',               role: 'async SQL',                 category: 'database'   },
+  diesel:               { name: 'Diesel',             role: 'ORM',                       category: 'database'   },
+  serde:                { name: 'Serde',              role: 'serialization',             category: 'tooling'    },
+
+  // --- Go (matched by module path segment) ---
+  gin:                  { name: 'Gin',                role: 'web framework',             category: 'framework'  },
+  echo:                 { name: 'Echo',               role: 'web framework',             category: 'framework'  },
+  fiber:                { name: 'Fiber',              role: 'web framework',             category: 'framework'  },
+  chi:                  { name: 'chi',                role: 'HTTP router',               category: 'framework'  },
+  gorm:                 { name: 'GORM',               role: 'ORM',                       category: 'database'   },
 }
 
 const CATEGORY_ORDER: StackCategory[] = ['language', 'framework', 'database', 'testing', 'tooling', 'other']
@@ -205,33 +258,118 @@ export async function getProjectMeta(repoRoot: string): Promise<ProjectMeta> {
   return { name: repoRoot.split(/[\\/]/).at(-1) ?? 'unknown', description: '', version: '0.0.0', language: 'unknown', repoUrl }
 }
 
-export function detectStack(repoRoot: string): StackItem[] {
-  const allDeps: string[] = []
+// Directories never worth scanning for manifests.
+const SKIP_DIRS = new Set([
+  'node_modules', 'dist', 'build', 'out', '.next', 'coverage', 'target', 'vendor',
+  '.venv', 'venv', 'env', '__pycache__', '.turbo', '.mindr', 'site',
+  '.mypy_cache', '.pytest_cache', '.ruff_cache',
+])
 
-  // Node: package.json
-  const pkg = readJsonSafe(join(repoRoot, 'package.json'))
-  if (pkg) {
-    const deps = pkg['dependencies'] as Record<string, unknown> | undefined
-    const devDeps = pkg['devDependencies'] as Record<string, unknown> | undefined
-    allDeps.push(...Object.keys(deps ?? {}), ...Object.keys(devDeps ?? {}))
-    // If TypeScript config exists but no explicit 'typescript' dep, flag it
-    if (existsSync(join(repoRoot, 'tsconfig.json')) && !allDeps.includes('typescript')) {
-      allDeps.push('typescript')
+const MANIFEST_NAMES = new Set(['package.json', 'pyproject.toml', 'go.mod', 'Cargo.toml'])
+
+function readFileSafe(path: string): string | null {
+  try {
+    return readFileSync(path, 'utf8')
+  } catch {
+    return null
+  }
+}
+
+function safeReaddir(dir: string): Dirent[] {
+  try {
+    return readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return []
+  }
+}
+
+// Find dependency manifests across the repo (not just the root) so monorepos
+// and projects that keep manifests in subdirectories (server/, packages/*, …)
+// are detected. Shallow, bounded, and skips heavy/build directories.
+function findManifests(repoRoot: string, maxDepth = 3, cap = 80): string[] {
+  const found: string[] = []
+  const walk = (dir: string, depth: number): void => {
+    if (depth > maxDepth || found.length >= cap) return
+    for (const e of safeReaddir(dir)) {
+      if (found.length >= cap) return
+      if (e.isDirectory()) {
+        if (SKIP_DIRS.has(e.name) || e.name.startsWith('.')) continue
+        walk(join(dir, e.name), depth + 1)
+      } else if (MANIFEST_NAMES.has(e.name) || /^requirements.*\.txt$/i.test(e.name)) {
+        found.push(join(dir, e.name))
+      }
+    }
+  }
+  walk(repoRoot, 0)
+  return found
+}
+
+// Normalise a Python requirement spec to its bare package name.
+// "uvicorn[standard]>=0.27.0" -> "uvicorn"; "psycopg2-binary>=2.9" -> "psycopg2-binary"
+function pyPackageName(spec: string): string {
+  return spec.split(/[<>=!~;\s[\]()]/)[0].trim().toLowerCase()
+}
+
+// Extract required module paths (e.g. github.com/gin-gonic/gin) from a go.mod.
+function parseGoModules(text: string): string[] {
+  const mods: string[] = []
+  const re = /^\s*(?:require\s+)?([\w.\-/]+\.[\w.\-/]+)\s+v\d/gm
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text)) !== null) mods.push(m[1])
+  return mods
+}
+
+export function detectStack(repoRoot: string): StackItem[] {
+  const deps = new Set<string>()
+
+  for (const manifest of findManifests(repoRoot)) {
+    const base = basename(manifest)
+
+    if (base === 'package.json') {
+      const pkg = readJsonSafe(manifest)
+      if (pkg) {
+        for (const k of Object.keys((pkg['dependencies'] as Record<string, unknown>) ?? {})) deps.add(k)
+        for (const k of Object.keys((pkg['devDependencies'] as Record<string, unknown>) ?? {})) deps.add(k)
+      }
+    } else if (base === 'pyproject.toml') {
+      const py = readTomlSafe(manifest)
+      if (py) {
+        const projDeps = (py['project'] as Record<string, unknown> | undefined)?.['dependencies']
+        if (Array.isArray(projDeps)) for (const d of projDeps) deps.add(pyPackageName(String(d)))
+        const poetry = (py['tool'] as Record<string, unknown> | undefined)?.['poetry'] as
+          | Record<string, unknown>
+          | undefined
+        const poetryDeps = poetry?.['dependencies'] as Record<string, unknown> | undefined
+        if (poetryDeps) for (const k of Object.keys(poetryDeps)) deps.add(k.toLowerCase())
+      }
+    } else if (/^requirements.*\.txt$/i.test(base)) {
+      const txt = readFileSafe(manifest)
+      if (txt) {
+        for (const line of txt.split(/\r?\n/)) {
+          const t = line.trim()
+          if (!t || t.startsWith('#') || t.startsWith('-')) continue
+          deps.add(pyPackageName(t))
+        }
+      }
+    } else if (base === 'go.mod') {
+      const txt = readFileSafe(manifest)
+      if (txt) {
+        for (const mod of parseGoModules(txt)) {
+          for (const seg of mod.split('/')) if (KNOWN_DEPS[seg]) deps.add(seg)
+        }
+      }
+    } else if (base === 'Cargo.toml') {
+      const cargo = readTomlSafe(manifest)
+      const cdeps = cargo?.['dependencies'] as Record<string, unknown> | undefined
+      if (cdeps) for (const k of Object.keys(cdeps)) deps.add(k.toLowerCase())
     }
   }
 
-  // Python: pyproject.toml
-  const pyproject = readTomlSafe(join(repoRoot, 'pyproject.toml'))
-  if (pyproject) {
-    const project = pyproject['project'] as Record<string, unknown> | undefined
-    const deps2 = project?.['dependencies'] as string[] | undefined
-    if (Array.isArray(deps2)) allDeps.push(...deps2.map((d) => d.split(/[>=<[;]/)[0].trim()))
-  }
+  if (existsSync(join(repoRoot, 'tsconfig.json'))) deps.add('typescript')
 
-  // Collect unique matches
   const seen = new Set<string>()
   const items: StackItem[] = []
-  for (const dep of allDeps) {
+  for (const dep of deps) {
     const known = KNOWN_DEPS[dep]
     if (known && !seen.has(known.name)) {
       seen.add(known.name)
