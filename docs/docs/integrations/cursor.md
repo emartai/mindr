@@ -7,14 +7,14 @@ Mindr integrates with Cursor via MCP. Cursor's agent calls Mindr tools to load p
 **1. Install Mindr:**
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 ```
 
 **2. Initialize Mindr in your project:**
 
 ```bash
 cd my-project
-mindragent init
+mindr init
 ```
 
 **3. Register Mindr as an MCP server in Cursor.**
@@ -24,7 +24,7 @@ Open Cursor settings (`Ctrl+Shift+J` / `Cmd+Shift+J`), go to **Features → MCP 
 ```json
 {
   "mindr": {
-    "command": "mindragent",
+    "command": "mindr",
     "args": ["serve"]
   }
 }
@@ -36,7 +36,7 @@ Or edit `~/.cursor/mcp.json` directly:
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindragent",
+      "command": "mindr",
       "args": ["serve"]
     }
   }

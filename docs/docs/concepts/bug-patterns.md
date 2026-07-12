@@ -46,8 +46,8 @@ These produce the same structural fingerprint, because the shape (if-return-retu
 ## Viewing stored patterns
 
 ```bash
-mindragent bugs list
-mindragent bugs list --module auth
+mindr bugs list
+mindr bugs list --module auth
 ```
 
 ## Checking code against patterns

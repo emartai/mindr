@@ -2,7 +2,7 @@
   "mcp": {
     "servers": {
       "mindr": {
-        "command": "mindragent",
+        "command": "mindr",
         "args": ["serve"]
       }
     }

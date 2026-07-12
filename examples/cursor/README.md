@@ -7,9 +7,9 @@ Gives Cursor persistent memory of your codebase via MCP.
 1. Install Mindr and initialise your project:
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 cd your-project
-mindragent init
+mindr init
 ```
 
 2. Copy `.cursor/mcp.json` from this directory into your project root (or merge with your existing config):
@@ -18,7 +18,7 @@ mindragent init
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindragent",
+      "command": "mindr",
       "args": ["serve"]
     }
   }

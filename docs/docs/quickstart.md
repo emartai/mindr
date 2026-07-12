@@ -8,16 +8,16 @@
 ## Install
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 ```
 
 ## Initialize Mindr
 
-Run `mindragent init` in your project root:
+Run `mindr init` in your project root:
 
 ```bash
 cd my-project
-mindragent init
+mindr init
 ```
 
 You will be prompted to choose a storage backend:
@@ -27,7 +27,7 @@ You will be prompted to choose a storage backend:
 | **Local SQLite** | Zero-config. Stores memories in `.mindr/mindr.sqlite`. Best for solo or small team use. |
 | **Remembr cloud** | Cross-machine persistence. Requires a Remembr base URL and API key. |
 
-For most projects, SQLite is the right choice. You can migrate later with `mindragent migrate sqlite-to-remembr`.
+For most projects, SQLite is the right choice. You can migrate later with `mindr migrate sqlite-to-remembr`.
 
 After init, Mindr:
 1. Creates `.mindr/config.toml`
@@ -45,7 +45,7 @@ After init, Mindr:
 ## Verify
 
 ```bash
-mindragent status
+mindr status
 ```
 
 Output shows backend type, hook status, and memory counts per type.
@@ -60,7 +60,7 @@ Add to `.claude/settings.json` (project-level) or `~/.claude/settings.json` (glo
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindragent",
+      "command": "mindr",
       "args": ["serve"]
     }
   }
@@ -87,8 +87,8 @@ Mindr detects keywords like `switch`, `migrate`, `refactor`, dependency changes,
 You can also store memories manually:
 
 ```bash
-mindragent remember "We use tRPC for all internal APIs" --type decision --module api
-mindragent remember "JWT expiry is 15m; refresh tokens live in Redis" --type decision --module auth
+mindr remember "We use tRPC for all internal APIs" --type decision --module api
+mindr remember "JWT expiry is 15m; refresh tokens live in Redis" --type decision --module auth
 ```
 
 ## Generate AGENTS.md
@@ -96,7 +96,7 @@ mindragent remember "JWT expiry is 15m; refresh tokens live in Redis" --type dec
 After a few commits or manual memories, generate a structured snapshot:
 
 ```bash
-mindragent generate agents-md
+mindr generate agents-md
 ```
 
 This writes `AGENTS.md` to your project root. Agents read it at session start. Re-run it after major decisions to keep it fresh.

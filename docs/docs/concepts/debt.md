@@ -30,7 +30,7 @@ Each detected marker is stored as a `debt` memory with:
 Add debt items without a commit:
 
 ```bash
-mindragent debt add "Replace temporary retry loop with proper queue" \
+mindr debt add "Replace temporary retry loop with proper queue" \
   --file src/billing/invoice.ts \
   --severity high
 ```
@@ -48,7 +48,7 @@ await mindr.addDebt('Replace temporary retry loop', {
 When a debt item is addressed, mark it resolved:
 
 ```bash
-mindragent debt resolve <debt-id>
+mindr debt resolve <debt-id>
 ```
 
 This stores a `debt_resolved` marker that references the original debt ID. The original memory is preserved for audit purposes — it is not deleted.
@@ -61,16 +61,16 @@ await mindr.resolveDebt('mem-abc123');
 
 ```bash
 # Show all debt
-mindragent debt list
+mindr debt list
 
 # Filter by severity and module
-mindragent debt list --severity high --module billing
+mindr debt list --severity high --module billing
 
 # Show only old debt (older than 30 days)
-mindragent debt list --age 30
+mindr debt list --age 30
 
 # Markdown summary by module and severity
-mindragent debt report
+mindr debt report
 ```
 
 ```ts
@@ -104,7 +104,7 @@ diff scanned for markers
 debt memory stored (stable debt_id)
     │
     ▼ (when addressed)
-mindragent debt resolve <id>
+mindr debt resolve <id>
     │
     ▼
 debt_resolved marker stored

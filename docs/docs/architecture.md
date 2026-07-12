@@ -8,7 +8,7 @@ Mindr is a TypeScript monorepo with three published packages:
 |---------|----------|------|
 | `packages/core` | `@emartai/mindr-core` | Storage, git integration, analysis, context |
 | `packages/sdk` | `@emartai/mindr` | Clean TypeScript API wrapping core |
-| `packages/cli` | `mindragent` | CLI commands + MCP server + local UI |
+| `packages/cli` | `mindr` | CLI commands + MCP server + local UI |
 
 The CLI and SDK both depend on core. They never depend on each other.
 
@@ -47,7 +47,7 @@ Two implementations ship out of the box:
 
 ## Git integration
 
-**Post-commit hook** (`packages/core/src/git/hooks.ts`) — `mindragent init` installs a hook at `.git/hooks/post-commit`. On every commit it runs `mindragent internal process-commit`, which calls the watcher.
+**Post-commit hook** (`packages/core/src/git/hooks.ts`) — `mindr init` installs a hook at `.git/hooks/post-commit`. On every commit it runs `mindr internal process-commit`, which calls the watcher.
 
 **Watcher** (`packages/core/src/git/watcher.ts`) — `onCommit(backend, repoRoot, sha)` processes a single commit:
 
@@ -131,11 +131,11 @@ Higher-quality memories are surfaced first in context injection and `memory list
 | `mindr:context_health` | Score session drift |
 | `mindr:checkpoint` | Write a session checkpoint |
 
-`mindragent serve` starts the server on stdio. Any MCP-compatible agent can connect via the standard tool-calling protocol.
+`mindr serve` starts the server on stdio. Any MCP-compatible agent can connect via the standard tool-calling protocol.
 
 ## Local UI
 
-`packages/cli/src/ui/server.ts` — `mindragent ui` starts an HTTP server at `http://127.0.0.1:3131`. It serves read-only pages for Overview, Memories, Decisions, Conventions, Technical Debt, and Sessions, backed directly by the same storage backend. Restricted to localhost — remote connections are rejected with 403.
+`packages/cli/src/ui/server.ts` — `mindr ui` starts an HTTP server at `http://127.0.0.1:3131`. It serves read-only pages for Overview, Memories, Decisions, Conventions, Technical Debt, and Sessions, backed directly by the same storage backend. Restricted to localhost — remote connections are rejected with 403.
 
 ## Data flow diagram
 
@@ -146,7 +146,7 @@ git commit
 post-commit hook
     │
     ▼
-mindragent internal process-commit
+mindr internal process-commit
     │
     ├── watcher.onCommit()
     │       ├── detect decisions (5 trigger signals)

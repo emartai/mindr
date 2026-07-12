@@ -30,14 +30,14 @@ Support for additional languages can be added by contributing a Tree-sitter gram
 
 ## When conventions are updated
 
-- **On `mindragent init`** — an initial scan runs across all files in the project
+- **On `mindr init`** — an initial scan runs across all files in the project
 - **On every commit** — files touched in the commit are re-scanned incrementally; the stored convention memory for that language is updated
 
 ## Viewing conventions
 
 ```bash
-# Via CLI (shown in mindragent status and mindragent generate agents-md)
-mindragent generate agents-md
+# Via CLI (shown in mindr status and mindr generate agents-md)
+mindr generate agents-md
 ```
 
 ```ts

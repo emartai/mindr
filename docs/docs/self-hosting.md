@@ -53,8 +53,8 @@ If you started with SQLite and want to move to Remembr:
 2. Run the migration:
 
 ```bash
-mindragent migrate sqlite-to-remembr --dry-run  # preview
-mindragent migrate sqlite-to-remembr            # execute
+mindr migrate sqlite-to-remembr --dry-run  # preview
+mindr migrate sqlite-to-remembr            # execute
 ```
 
 Migration is one-way and additive — it copies memories to Remembr without deleting them from SQLite.
@@ -71,20 +71,20 @@ org_id   = "your-org-id"
 
 ## CI/CD usage
 
-In CI pipelines where you want agents to read project context, set the Remembr credentials as secrets and run `mindragent generate agents-md` as a pre-step:
+In CI pipelines where you want agents to read project context, set the Remembr credentials as secrets and run `mindr generate agents-md` as a pre-step:
 
 ```yaml
 - name: Refresh AGENTS.md
   env:
     REMEMBR_API_KEY: ${{ secrets.REMEMBR_API_KEY }}
-  run: mindragent generate agents-md
+  run: mindr generate agents-md
 ```
 
 Or commit a pre-generated `AGENTS.md` to the repository and let agents read it directly without running Mindr in CI.
 
 ## Security considerations
 
-- The local UI (`mindragent ui`) binds to `127.0.0.1` only. Remote connections are rejected with 403.
+- The local UI (`mindr ui`) binds to `127.0.0.1` only. Remote connections are rejected with 403.
 - The MCP server communicates over stdio — it never opens a network port.
 - `REMEMBR_API_KEY` should always be set via environment variable, not committed in config files.
 - The SQLite file contains all stored memories. Treat it with the same sensitivity as a `.env` file.
