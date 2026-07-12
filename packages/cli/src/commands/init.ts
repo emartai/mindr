@@ -76,8 +76,9 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
   const configPath = join(mindrDir, 'config.toml')
   writeFileSync(configPath, buildConfigToml(answers.backendChoice, answers.remembrUrl), 'utf8')
 
-  // Install hook — idempotent, installPostCommitHook guards against double-install
-  installPostCommitHook(repoRoot)
+  // Install hook — idempotent, installPostCommitHook guards against double-install.
+  // Returns the real path written (honors core.hooksPath).
+  const installedHookPath = installPostCommitHook(repoRoot)
 
   // First convention scan (non-fatal)
   if (!deps.skipScan) {
@@ -108,7 +109,6 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
     }
   }
 
-  const hookPath = join(repoRoot, '.git', 'hooks', 'post-commit')
   const alreadyExists = existsSync(configPath)
   process.stdout.write(
     [
@@ -117,7 +117,7 @@ export async function runInit(deps: InitDeps = {}): Promise<void> {
       '',
       `  ${chalk.cyan('Backend:')} ${answers.backendChoice}`,
       `  ${chalk.cyan('Config:')}  ${configPath}`,
-      `  ${chalk.cyan('Hook:')}    ${hookPath}`,
+      `  ${chalk.cyan('Hook:')}    ${installedHookPath}`,
       '',
     ].join('\n'),
   )
