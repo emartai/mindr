@@ -5,10 +5,10 @@ import { execFileSync } from 'child_process'
 
 const HOOK_BEGIN = '# >>> mindr-begin <<<'
 const HOOK_END = '# >>> mindr-end <<<'
-// Guarded so it can never disrupt a commit: it skips silently when `mindragent`
+// Guarded so it can never disrupt a commit: it skips silently when `mindr`
 // is not on PATH, and always exits 0 (post-commit hooks should be invisible).
 const HOOK_BODY =
-  'command -v mindragent >/dev/null 2>&1 && mindragent internal on-commit "$(git rev-parse HEAD)" || true'
+  'command -v mindr >/dev/null 2>&1 && mindr internal on-commit "$(git rev-parse HEAD)" || true'
 
 const MINDR_BLOCK = `${HOOK_BEGIN}\n${HOOK_BODY}\n${HOOK_END}`
 

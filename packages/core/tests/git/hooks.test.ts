@@ -23,7 +23,7 @@ describe('installPostCommitHook', () => {
     expect(existsSync(hookFile())).toBe(true)
     const content = readFileSync(hookFile(), 'utf8')
     expect(content).toContain('#!/bin/sh')
-    expect(content).toContain('mindragent internal on-commit')
+    expect(content).toContain('mindr internal on-commit')
   })
 
   it('is idempotent — running twice produces exactly one mindr block', () => {
@@ -39,7 +39,7 @@ describe('installPostCommitHook', () => {
     installPostCommitHook(tmpDir)
     const content = readFileSync(hookFile(), 'utf8')
     expect(content).toContain('echo "existing hook"')
-    expect(content).toContain('mindragent internal on-commit')
+    expect(content).toContain('mindr internal on-commit')
   })
 
   it('writes LF line endings regardless of platform', () => {
@@ -55,7 +55,7 @@ describe('uninstallPostCommitHook', () => {
     installPostCommitHook(tmpDir)
     uninstallPostCommitHook(tmpDir)
     const content = readFileSync(hookFile(), 'utf8')
-    expect(content).not.toContain('mindragent internal on-commit')
+    expect(content).not.toContain('mindr internal on-commit')
     expect(content).toContain('echo "existing"')
   })
 

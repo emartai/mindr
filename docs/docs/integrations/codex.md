@@ -7,14 +7,14 @@ Mindr integrates with OpenAI Codex CLI via MCP.
 **1. Install Mindr:**
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 ```
 
 **2. Initialize Mindr in your project:**
 
 ```bash
 cd my-project
-mindragent init
+mindr init
 ```
 
 **3. Add the MCP server to your Codex configuration.**
@@ -24,7 +24,7 @@ Edit `~/.codex/config.toml` (or create it):
 ```toml
 [[mcp_servers]]
 name    = "mindr"
-command = "mindragent serve"
+command = "mindr serve"
 ```
 
 Or in YAML format (`~/.codex/config.yaml`):
@@ -32,7 +32,7 @@ Or in YAML format (`~/.codex/config.yaml`):
 ```yaml
 mcp_servers:
   - name: mindr
-    command: mindragent serve
+    command: mindr serve
 ```
 
 **4. Start a new Codex session.** The Mindr tools will be available automatically.

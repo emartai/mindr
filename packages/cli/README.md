@@ -10,21 +10,21 @@ AI coding agents are stateless by default — every session starts from zero, re
 ## Install
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 ```
 
 ## 60-second demo
 
 ```bash
 cd my-project
-mindragent init                      # scan repo, install git hook, detect conventions
+mindr init                      # scan repo, install git hook, detect conventions
 
-mindragent generate agents-md        # auto-generate AGENTS.md from observed patterns
-mindragent generate claude-md        # auto-generate CLAUDE.md
+mindr generate agents-md        # auto-generate AGENTS.md from observed patterns
+mindr generate claude-md        # auto-generate CLAUDE.md
 
-mindragent remember "We use tRPC for all internal APIs" --type decision
-mindragent memory list
-mindragent status
+mindr remember "We use tRPC for all internal APIs" --type decision
+mindr memory list
+mindr status
 ```
 
 ## MCP setup (Claude Code)
@@ -34,7 +34,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "mcpServers": {
-    "mindr": { "command": "mindragent", "args": ["serve"] }
+    "mindr": { "command": "mindr", "args": ["serve"] }
   }
 }
 ```
@@ -44,26 +44,26 @@ Every new session now gets automatic context — decisions, conventions, hot mod
 ## CLI reference
 
 ```
-mindragent init                       Set up Mindr in current repo
-mindragent remember <text>            Store a memory manually
-mindragent forget <id>                Delete a memory
-mindragent memory list                Browse stored memories
-mindragent decisions                  Browse architectural decisions
-mindragent replay                     Chronological decision timeline
-mindragent debt list                  Browse technical debt
-mindragent debt add <text>            Add a debt item manually
-mindragent bugs                       Browse bug pattern memory
-mindragent branch status              Branch-aware memory view
-mindragent session health             Context pollution score
-mindragent stats                      Token savings report
-mindragent generate agents-md         Generate AGENTS.md
-mindragent generate claude-md         Generate CLAUDE.md
-mindragent serve                      Start MCP server
-mindragent ui                         Open local dashboard (localhost:3131)
-mindragent status                     Health check
-mindragent migrate                    Migrate SQLite → Remembr cloud
-mindragent config get <key>           Read config value
-mindragent config set <key> <value>   Write config value
+mindr init                       Set up Mindr in current repo
+mindr remember <text>            Store a memory manually
+mindr forget <id>                Delete a memory
+mindr memory list                Browse stored memories
+mindr decisions                  Browse architectural decisions
+mindr replay                     Chronological decision timeline
+mindr debt list                  Browse technical debt
+mindr debt add <text>            Add a debt item manually
+mindr bugs                       Browse bug pattern memory
+mindr branch status              Branch-aware memory view
+mindr session health             Context pollution score
+mindr stats                      Token savings report
+mindr generate agents-md         Generate AGENTS.md
+mindr generate claude-md         Generate CLAUDE.md
+mindr serve                      Start MCP server
+mindr ui                         Open local dashboard (localhost:3131)
+mindr status                     Health check
+mindr migrate                    Migrate SQLite → Remembr cloud
+mindr config get <key>           Read config value
+mindr config set <key> <value>   Write config value
 ```
 
 ## Documentation

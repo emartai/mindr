@@ -34,7 +34,7 @@ When a branch is deleted or rebased, its memories remain in the store but become
 ## Viewing branch activity
 
 ```bash
-mindragent branch status
+mindr branch status
 ```
 
 Output shows:
@@ -45,7 +45,7 @@ Output shows:
 - Number of shared memories from the default branch
 
 ```bash
-mindragent branch status --json
+mindr branch status --json
 ```
 
 Returns structured JSON for programmatic use.

@@ -1,1 +1,1 @@
-{"mcpServers":{"mindr":{"command":"mindragent","args":["serve"]}}}
+{"mcpServers":{"mindr":{"command":"mindr","args":["serve"]}}}

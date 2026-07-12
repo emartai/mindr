@@ -7,14 +7,14 @@ Mindr integrates with Claude Code via the Model Context Protocol (MCP). Claude c
 **1. Install Mindr:**
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 ```
 
 **2. Initialize Mindr in your project:**
 
 ```bash
 cd my-project
-mindragent init
+mindr init
 ```
 
 **3. Add the MCP server to Claude Code settings.**
@@ -25,7 +25,7 @@ For a single project, create or edit `.claude/settings.json` in your project roo
 {
   "mcpServers": {
     "mindr": {
-      "command": "mindragent",
+      "command": "mindr",
       "args": ["serve"]
     }
   }
@@ -99,10 +99,10 @@ Claude will call `mindr:remember` with `type: "decision"` and the content you sp
 
 ## Viewing what Mindr knows
 
-Run `mindragent status` in your terminal to see memory counts, or open the local dashboard:
+Run `mindr status` in your terminal to see memory counts, or open the local dashboard:
 
 ```bash
-mindragent ui
+mindr ui
 ```
 
 Then visit `http://127.0.0.1:3131` in your browser.

@@ -7,9 +7,9 @@ Gives OpenCode persistent memory of your codebase via MCP.
 1. Install Mindr and initialise your project:
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 cd your-project
-mindragent init
+mindr init
 ```
 
 2. Copy `opencode.json` from this directory to `.opencode/config.json` in your project root (or merge with your existing config):
@@ -19,7 +19,7 @@ mindragent init
   "mcp": {
     "servers": {
       "mindr": {
-        "command": "mindragent",
+        "command": "mindr",
         "args": ["serve"]
       }
     }

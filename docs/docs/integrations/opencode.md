@@ -7,14 +7,14 @@ Mindr integrates with OpenCode via MCP.
 **1. Install Mindr:**
 
 ```bash
-npm install -g mindragent
+npm install -g mindr
 ```
 
 **2. Initialize Mindr in your project:**
 
 ```bash
 cd my-project
-mindragent init
+mindr init
 ```
 
 **3. Add Mindr to `opencode.json`.**
@@ -26,7 +26,7 @@ Create or edit `opencode.json` in your project root (or `~/.opencode/opencode.js
   "mcp": {
     "servers": {
       "mindr": {
-        "command": "mindragent",
+        "command": "mindr",
         "args": ["serve"]
       }
     }

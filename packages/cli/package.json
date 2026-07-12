@@ -1,13 +1,13 @@
 {
-  "name": "mindragent",
-  "version": "1.1.0",
+  "name": "mindr",
+  "version": "0.1.0",
   "description": "Persistent codebase memory for AI coding agents",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "mindragent": "./dist/cli.js"
+    "mindr": "./dist/cli.js"
   },
   "exports": {
     ".": {

@@ -23,7 +23,7 @@ const program = new Command()
 declare const __MINDR_VERSION__: string
 const VERSION = typeof __MINDR_VERSION__ !== 'undefined' ? __MINDR_VERSION__ : '0.0.0'
 
-program.name('mindragent').description('Memory-augmented dev tooling').version(VERSION)
+program.name('mindr').description('Memory-augmented dev tooling').version(VERSION)
 
 addInitCommand(program)
 addRememberCommand(program)
