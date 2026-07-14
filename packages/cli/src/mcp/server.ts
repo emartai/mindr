@@ -140,11 +140,12 @@ const TOOLS = [
 
 type JsonObj = Record<string, unknown>
 
-async function handleGetContext(args: JsonObj, backend: MemoryBackend): Promise<string> {
+async function handleGetContext(args: JsonObj, backend: MemoryBackend, repoRoot?: string): Promise<string> {
   const ctx = await buildSessionContext(backend, {
     module:     typeof args['module']     === 'string' ? args['module']     : undefined,
     files:      Array.isArray(args['files']) ? args['files'] as string[]    : undefined,
     max_tokens: typeof args['max_tokens'] === 'number' ? args['max_tokens'] : undefined,
+    repoRoot,
   })
   const sessionId = typeof args['session_id'] === 'string' ? args['session_id'] : undefined
   if (sessionId) {
@@ -321,7 +322,7 @@ async function handleCheckpoint(args: JsonObj, backend: MemoryBackend): Promise<
 declare const __MINDR_VERSION__: string
 const _SERVER_VERSION = typeof __MINDR_VERSION__ !== 'undefined' ? __MINDR_VERSION__ : '0.0.0'
 
-export function createMindrServer(backend: MemoryBackend): Server {
+export function createMindrServer(backend: MemoryBackend, repoRoot?: string): Server {
   const server = new Server(
     { name: 'mindr', version: _SERVER_VERSION },
     { capabilities: { tools: {} } },
@@ -336,7 +337,7 @@ export function createMindrServer(backend: MemoryBackend): Server {
     let text: string
     try {
       switch (name) {
-        case 'mindr:get_context': text = await handleGetContext(args, backend); break
+        case 'mindr:get_context': text = await handleGetContext(args, backend, repoRoot); break
         case 'mindr:remember':    text = await handleRemember(args, backend);   break
         case 'mindr:check_for_bug_patterns': text = await handleCheckForBugPatterns(args, backend); break
         case 'mindr:context_health': text = await handleContextHealth(args); break

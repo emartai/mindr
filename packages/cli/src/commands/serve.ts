@@ -14,7 +14,7 @@ export function addServeCommands(program: Command): void {
         const backend = getBackend(config)
 
         const { StdioServerTransport } = await import('@modelcontextprotocol/sdk/server/stdio.js')
-        const server = createMindrServer(backend)
+        const server = createMindrServer(backend, repoRoot)
         const transport = new StdioServerTransport()
 
         process.stderr.write('mindr: MCP server starting (stdio transport)\n')

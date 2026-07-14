@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs'
+import { join } from 'path'
+import { tmpdir } from 'os'
 import { buildSessionContext } from '../../src/context/builder.js'
 import type { MemoryBackend, MindrMemory, MindrSession, StoreParams, SearchParams } from '../../src/storage/backend.js'
 import type { MindrTag } from '../../src/schema.js'
@@ -296,5 +299,27 @@ describe('buildSessionContext — empty backend', () => {
     const ctx = await buildSessionContext(new MockBackend([]))
     expect(typeof ctx.summary).toBe('string')
     expect(ctx.summary.length).toBeGreaterThan(0)
+  })
+})
+
+describe('buildSessionContext — stack overview enrichment', () => {
+  it('names detected frameworks/databases in the summary when repoRoot is set', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'mindr-ctx-'))
+    try {
+      mkdirSync(join(dir, 'server'), { recursive: true })
+      writeFileSync(join(dir, 'server', 'requirements.txt'), 'fastapi>=0.109.0\nsqlalchemy>=2.0\nredis>=5.0\n')
+      const ctx = await buildSessionContext(new MockBackend(FIXTURES), { repoRoot: dir })
+      expect(ctx.summary).toContain('FastAPI')
+      expect(ctx.summary).toContain('SQLAlchemy')
+      expect(ctx.summary).toContain('Languages:')
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it('falls back to convention languages when no repoRoot is provided', async () => {
+    const ctx = await buildSessionContext(new MockBackend(FIXTURES))
+    expect(ctx.stack).toEqual(['python', 'typescript'])
+    expect(ctx.summary).toContain('[STACK OVERVIEW]')
   })
 })
