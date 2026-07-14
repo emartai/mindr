@@ -4,6 +4,7 @@ import type { MemoryBackend, MindrMemory } from '../storage/backend.js'
 import type { ConventionProfile } from '../conventions/detector.js'
 import { branchMemoryQuery } from '../git/lineage.js'
 import { scoreMemoryQuality } from '../quality/score.js'
+import { detectStack } from '../generate/context.js'
 
 // ---------------------------------------------------------------------------
 
@@ -64,9 +65,14 @@ type SectionName = keyof typeof SECTION_PRIORITY
 // Section renderers
 // ---------------------------------------------------------------------------
 
-function renderStackOverview(stack: string[], mods: HotModule[]): string {
+function renderStackOverview(langs: string[], tech: string[], mods: HotModule[]): string {
   const lines: string[] = []
-  if (stack.length > 0) lines.push(`  Stack: ${stack.join(' | ')}`)
+  if (langs.length > 0) lines.push(`  Languages: ${langs.join(', ')}`)
+  if (tech.length > 0) {
+    const shown = tech.slice(0, 10)
+    const extra = tech.length - shown.length
+    lines.push(`  Stack: ${shown.join(', ')}${extra > 0 ? ` (+${extra} more)` : ''}`)
+  }
   if (mods.length > 0) {
     lines.push(`  Hot modules: ${mods.map((m) => `${m.module} (${m.touches})`).join(', ')}`)
   }
@@ -246,6 +252,20 @@ export async function buildSessionContext(
   // Build derived structures
   const stack = profiles.map((p) => p.language)
 
+  // Enrich the overview with detected frameworks/databases when a repo root is
+  // available, so the live agent context lists FastAPI/SQLAlchemy/etc. — not
+  // just "python". Falls back to the convention languages otherwise.
+  let overviewLangs: string[] = stack
+  let overviewTech: string[] = []
+  if (repoRoot) {
+    const items = detectStack(repoRoot)
+    if (items.length > 0) {
+      const langs = items.filter((i) => i.category === 'language').map((i) => i.name)
+      overviewLangs = langs.length > 0 ? langs : stack
+      overviewTech = items.filter((i) => i.category !== 'language').map((i) => i.name)
+    }
+  }
+
   const conventions = profiles.map((p) => ({
     language: p.language,
     rules: p.conventions
@@ -257,7 +277,7 @@ export async function buildSessionContext(
 
   // Render all sections
   const sections: Record<SectionName, string> = {
-    stackOverview: renderStackOverview(stack, hotModules),
+    stackOverview: renderStackOverview(overviewLangs, overviewTech, hotModules),
     conventions:   renderConventions(conventions),
     decisions:     renderDecisions(decisions),
     recentTask:    renderRecentTask(recentTask),

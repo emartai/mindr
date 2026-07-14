@@ -508,7 +508,7 @@ export class Mindr {
    * ```
    */
   async getSessionContext(opts: SessionContextOptions = {}): Promise<SessionContext> {
-    return buildSessionContext(this.backend, opts)
+    return buildSessionContext(this.backend, { repoRoot: this.repoRoot, ...opts })
   }
 
   async getContextHealth(sessionId: string): Promise<ContextHealthResult> {
