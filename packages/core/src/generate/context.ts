@@ -498,6 +498,10 @@ export function detectCommands(repoRoot: string): CommandItem[] {
   }
 
   // 3. Ecosystem conventions — fill gaps for languages without scripts/Makefile.
+  // TODO(generate): detect per-package commands in polyglot monorepos (e.g.
+  // `cd server && pytest`) by parsing Makefile `cd X && ...` recipes. Skipped
+  // for now because guessing which of several same-language packages is "the"
+  // one to test would mislead the agent more than omitting the command.
   // Python
   const pyprojectPath = join(repoRoot, 'pyproject.toml')
   const pyprojectRaw = readFileSafe(pyprojectPath)
