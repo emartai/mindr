@@ -1,7 +1,7 @@
 // Shared data types and gatherers for all generator targets.
 
 import { readFileSync, existsSync, readdirSync, type Dirent } from 'fs'
-import { join, basename } from 'path'
+import { join, basename, dirname, relative } from 'path'
 import { parse as parseTOML } from '@iarna/toml'
 import { simpleGit } from 'simple-git'
 import type { MemoryBackend, MindrMemory } from '../storage/backend.js'
@@ -262,7 +262,35 @@ export async function getProjectMeta(repoRoot: string): Promise<ProjectMeta> {
     }
   }
 
-  return { name: repoRoot.split(/[\\/]/).at(-1) ?? 'unknown', description: '', version: '0.0.0', language: 'unknown', repoUrl }
+  // No manifest at the root — a polyglot monorepo, or one that keeps its
+  // manifests in subdirectories (server/, sdk/*, …). Fall back to the stack
+  // scanner (which walks subdirs) so the header names the language(s) instead
+  // of reading "unknown" while the body clearly lists Python/TypeScript/etc.
+  return {
+    name: repoRoot.split(/[\\/]/).at(-1) ?? 'unknown',
+    description: '',
+    version: '0.0.0',
+    language: languageFromStack(detectStack(repoRoot)),
+    repoUrl,
+  }
+}
+
+// Collapse the languages found by detectStack() into a single ProjectMeta tag:
+// one language when the repo is uniform, 'mixed' when several coexist.
+function languageFromStack(stack: StackItem[]): ProjectMeta['language'] {
+  const NAME_TO_LANG: Record<string, ProjectMeta['language']> = {
+    TypeScript: 'typescript',
+    JavaScript: 'javascript',
+    Python: 'python',
+    Go: 'go',
+    Rust: 'rust',
+  }
+  const langs = new Set(
+    stack.filter((s) => s.category === 'language').map((s) => NAME_TO_LANG[s.name]).filter(Boolean),
+  )
+  if (langs.size === 0) return 'unknown'
+  if (langs.size === 1) return [...langs][0] as ProjectMeta['language']
+  return 'mixed'
 }
 
 // Directories never worth scanning for manifests.
@@ -425,8 +453,10 @@ export function detectStack(repoRoot: string): StackItem[] {
 // install, build, test, lint, etc. We extract these from the most authoritative
 // source available — package.json scripts and Makefile targets are explicit and
 // exact; ecosystem conventions (pytest, go test, cargo) fill gaps for languages
-// that don't declare scripts. Root-level only: that's where top-level commands
-// live, and guessing per-package commands in a monorepo would mislead.
+// that don't declare scripts. Root commands come first; when a monorepo has no
+// root test/build interface, we additionally surface each sub-package's own
+// commands scoped by directory (e.g. `cd server && pytest`) — never an
+// unscoped guess about which package is "the" one.
 // ---------------------------------------------------------------------------
 
 // Canonical output order — install first, then the run/verify loop.
@@ -498,10 +528,6 @@ export function detectCommands(repoRoot: string): CommandItem[] {
   }
 
   // 3. Ecosystem conventions — fill gaps for languages without scripts/Makefile.
-  // TODO(generate): detect per-package commands in polyglot monorepos (e.g.
-  // `cd server && pytest`) by parsing Makefile `cd X && ...` recipes. Skipped
-  // for now because guessing which of several same-language packages is "the"
-  // one to test would mislead the agent more than omitting the command.
   // Python
   const pyprojectPath = join(repoRoot, 'pyproject.toml')
   const pyprojectRaw = readFileSafe(pyprojectPath)
@@ -536,9 +562,78 @@ export function detectCommands(repoRoot: string): CommandItem[] {
     add('Run', 'cargo run')
   }
 
-  return COMMAND_ORDER
+  const root = COMMAND_ORDER
     .filter((label) => byLabel.has(label))
     .map((label) => ({ label, command: byLabel.get(label)! }))
+
+  // When the root already documents a run loop (test or build), it's a
+  // single-project repo — or a monorepo with a real top-level interface — and
+  // that's the whole answer. Otherwise (e.g. a Makefile that only does `setup`),
+  // dig into sub-packages for their own explicit commands, scoped by directory.
+  const rootLabels = new Set(root.map((c) => c.label))
+  if (rootLabels.has('Test') || rootLabels.has('Build')) return root
+
+  return [...root, ...detectMonorepoCommands(repoRoot)]
+}
+
+// Relative, POSIX-style directory of a manifest, from the repo root.
+function manifestDir(repoRoot: string, manifestPath: string): string {
+  const rel = relative(repoRoot, dirname(manifestPath)).replace(/\\/g, '/')
+  return rel === '' ? '.' : rel
+}
+
+// Sub-package commands for monorepos without a root test/build interface.
+// Each command is scoped with `cd <dir> && …`, so listing several packages is
+// unambiguous rather than a guess about which one is canonical. Only explicit
+// scripts and referenced test runners are emitted — never a bare assumption.
+function detectMonorepoCommands(repoRoot: string): CommandItem[] {
+  const out: CommandItem[] = []
+  const seen = new Set<string>()
+  const push = (label: string, dir: string, command: string): void => {
+    const scoped = `${label} (${dir})`
+    if (seen.has(scoped)) return
+    seen.add(scoped)
+    out.push({ label: scoped, command })
+  }
+
+  const manifests = findManifests(repoRoot)
+    .filter((m) => manifestDir(repoRoot, m) !== '.') // root handled already
+    .sort()
+    .slice(0, 12)
+
+  // Sub-package run-loop labels (skip Install/Format/Typecheck — too noisy per dir).
+  const SUB_LABELS = NPM_SCRIPT_LABELS.filter((l) => ['Dev', 'Build', 'Test', 'Lint'].includes(l.label))
+
+  for (const manifest of manifests) {
+    const dir = manifestDir(repoRoot, manifest)
+    const dirAbs = dirname(manifest)
+    const base = basename(manifest)
+
+    if (base === 'package.json') {
+      const pkg = readJsonSafe(manifest)
+      const scripts = new Set(Object.keys((pkg?.['scripts'] as Record<string, unknown>) ?? {}))
+      const pm = detectPackageManager(dirAbs)
+      for (const { label, names } of SUB_LABELS) {
+        const found = names.find((n) => scripts.has(n))
+        if (found) push(label, dir, `cd ${dir} && ${runNpmScript(pm, found)}`)
+      }
+    } else if (base === 'pyproject.toml' || /^requirements.*\.txt$/i.test(base)) {
+      const usesPytest =
+        (readFileSafe(join(dirAbs, 'pyproject.toml'))?.includes('pytest') ?? false) ||
+        existsSync(join(dirAbs, 'pytest.ini')) ||
+        existsSync(join(dirAbs, 'tox.ini')) ||
+        existsSync(join(dirAbs, 'conftest.py'))
+      if (usesPytest) push('Test', dir, `cd ${dir} && pytest`)
+    } else if (base === 'go.mod') {
+      push('Test', dir, `cd ${dir} && go test ./...`)
+      push('Build', dir, `cd ${dir} && go build ./...`)
+    } else if (base === 'Cargo.toml') {
+      push('Test', dir, `cd ${dir} && cargo test`)
+      push('Build', dir, `cd ${dir} && cargo build`)
+    }
+  }
+
+  return out
 }
 
 // ---------------------------------------------------------------------------

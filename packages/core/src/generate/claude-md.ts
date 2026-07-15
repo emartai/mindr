@@ -126,7 +126,12 @@ export async function generateClaudeMd(
   // --- Project Overview ---
   lines.push('## Project Overview')
   lines.push('')
-  const langStr = meta.language !== 'unknown' ? `${meta.language} project` : 'project'
+  const langStr =
+    meta.language === 'unknown'
+      ? 'project'
+      : meta.language === 'mixed'
+        ? 'polyglot project'
+        : `${meta.language} project`
   const stackNames = stack.map((s) => s.name)
   const stackStr =
     stackNames.length > 0

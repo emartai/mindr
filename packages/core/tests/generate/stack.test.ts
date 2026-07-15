@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
-import { detectStack, detectCommands } from '../../src/generate/context.js'
+import { detectStack, detectCommands, getProjectMeta } from '../../src/generate/context.js'
 
 let dir: string
 
@@ -125,5 +125,68 @@ describe('detectCommands', () => {
 
   it('returns [] for a repo with no manifests', () => {
     expect(detectCommands(dir)).toEqual([])
+  })
+
+  it('does NOT descend into sub-packages when the root has a run loop', () => {
+    // Root package.json provides build+test → single-project repo; sub-package
+    // commands must not be appended.
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ scripts: { build: 'tsc', test: 'vitest' } }))
+    mkdirSync(join(dir, 'packages', 'api'), { recursive: true })
+    writeFileSync(join(dir, 'packages', 'api', 'package.json'), JSON.stringify({ scripts: { test: 'vitest' } }))
+    const labels = detectCommands(dir).map((c) => c.label)
+    expect(labels).toContain('Build')
+    expect(labels).toContain('Test')
+    expect(labels.some((l) => l.includes('('))).toBe(false) // no scoped per-package labels
+  })
+
+  it('surfaces per-package commands (scoped by dir) for a polyglot monorepo with only `make setup`', () => {
+    writeFileSync(join(dir, 'Makefile'), 'setup:\n\t@echo done\n')
+    // Python backend
+    mkdirSync(join(dir, 'server'), { recursive: true })
+    writeFileSync(join(dir, 'server', 'pyproject.toml'), '[project]\nname="srv"\n[tool.pytest.ini_options]\n')
+    // TS SDK
+    mkdirSync(join(dir, 'sdk', 'typescript'), { recursive: true })
+    writeFileSync(
+      join(dir, 'sdk', 'typescript', 'package.json'),
+      JSON.stringify({ scripts: { build: 'tsc', test: 'vitest' } }),
+    )
+    const map = Object.fromEntries(detectCommands(dir).map((c) => [c.label, c.command]))
+    expect(map['Install']).toBe('make setup') // root command still first
+    expect(map['Test (server)']).toBe('cd server && pytest')
+    expect(map['Test (sdk/typescript)']).toBe('cd sdk/typescript && npm test')
+    expect(map['Build (sdk/typescript)']).toBe('cd sdk/typescript && npm run build')
+  })
+
+  it('does not emit pytest for a Python sub-package that never references it', () => {
+    writeFileSync(join(dir, 'Makefile'), 'setup:\n\t@echo done\n')
+    mkdirSync(join(dir, 'lib'), { recursive: true })
+    writeFileSync(join(dir, 'lib', 'requirements.txt'), 'requests\n') // no pytest anywhere
+    const labels = detectCommands(dir).map((c) => c.label)
+    expect(labels.some((l) => l.startsWith('Test ('))).toBe(false)
+  })
+})
+
+describe('getProjectMeta', () => {
+  it('labels a subdir-manifest monorepo as `mixed`, not `unknown`', async () => {
+    // No manifest at root; Python in server/, TypeScript in web/.
+    mkdirSync(join(dir, 'server'), { recursive: true })
+    writeFileSync(join(dir, 'server', 'requirements.txt'), 'fastapi\n')
+    mkdirSync(join(dir, 'web'), { recursive: true })
+    writeFileSync(join(dir, 'web', 'package.json'), JSON.stringify({ devDependencies: { typescript: '^5' } }))
+    writeFileSync(join(dir, 'web', 'tsconfig.json'), '{}')
+    const meta = await getProjectMeta(dir)
+    expect(meta.language).toBe('mixed')
+  })
+
+  it('names a single subdir language when the repo is uniform', async () => {
+    mkdirSync(join(dir, 'service'), { recursive: true })
+    writeFileSync(join(dir, 'service', 'requirements.txt'), 'flask\n')
+    const meta = await getProjectMeta(dir)
+    expect(meta.language).toBe('python')
+  })
+
+  it('still reports unknown when there are no manifests anywhere', async () => {
+    const meta = await getProjectMeta(dir)
+    expect(meta.language).toBe('unknown')
   })
 })
