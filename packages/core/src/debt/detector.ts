@@ -58,6 +58,17 @@ export interface DebtDiffFinding extends DebtMarker {
   removed: boolean
 }
 
+// Agent-instruction files legitimately quote TODO/FIXME as *documentation* of
+// debt (Mindr's own AGENTS.md lists debt items verbatim). Scanning them would
+// re-capture that text as fresh debt — a self-referential false positive — so
+// they're excluded from diff-based debt detection.
+const INSTRUCTION_FILES = new Set(['AGENTS.md', 'CLAUDE.md', 'GEMINI.md'])
+
+function isInstructionFile(path: string): boolean {
+  const base = path.split('/').pop() ?? path
+  return INSTRUCTION_FILES.has(base)
+}
+
 export function detectDebtInUnifiedDiff(
   diff: string,
   markers: readonly string[] = DEFAULT_DEBT_MARKERS,
@@ -78,8 +89,12 @@ export function detectDebtInUnifiedDiff(
     } else if ((raw.startsWith('+') || raw.startsWith('-')) && !raw.startsWith('+++') && !raw.startsWith('---')) {
       const removed = raw.startsWith('-')
       const lineNo = removed ? removedLine : addedLine
-      const detected = detectDebtInText(currentFile, raw.slice(1), markers)
-      for (const item of detected) findings.push({ ...item, line: lineNo, removed })
+      // Skip detection for instruction files, but keep advancing line counters
+      // so positions in other files within the same diff stay correct.
+      if (!isInstructionFile(currentFile)) {
+        const detected = detectDebtInText(currentFile, raw.slice(1), markers)
+        for (const item of detected) findings.push({ ...item, line: lineNo, removed })
+      }
       if (removed) removedLine++
       else addedLine++
     } else if (!raw.startsWith('\\')) {
