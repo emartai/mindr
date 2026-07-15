@@ -2,6 +2,12 @@
 
 ## The problem: agents start every session blind
 
+:::danger Agent amnesia
+Modern AI agents work in isolated context windows. When a new session starts, the agent has
+lost every prior refactor, every "why" decision, and every preference you established. The
+result: regressive bugs, circular reasoning, and hours of manual re-prompting.
+:::
+
 A coding agent's context window resets between sessions. Every time you open a new
 conversation, the agent re-derives the same things you told it yesterday:
 

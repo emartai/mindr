@@ -1,15 +1,16 @@
 /* ==========================================================================
-   Mindr — brand theme
+   Mindr — Emart AI brand theme
+   Brand: emerald #22C55E · deep forest green #0B3D2A
    ========================================================================== */
 
 :root {
-  --ifm-color-primary: #5b4ee0;
-  --ifm-color-primary-dark: #4634db;
-  --ifm-color-primary-darker: #3d2ad4;
-  --ifm-color-primary-darkest: #3323ad;
-  --ifm-color-primary-light: #7264e6;
-  --ifm-color-primary-lighter: #8577e9;
-  --ifm-color-primary-lightest: #a99ff1;
+  --ifm-color-primary: #15803d;
+  --ifm-color-primary-dark: #136b34;
+  --ifm-color-primary-darker: #11602f;
+  --ifm-color-primary-darkest: #0e4f27;
+  --ifm-color-primary-light: #1a9a49;
+  --ifm-color-primary-lighter: #1ca751;
+  --ifm-color-primary-lightest: #2fc266;
 
   --ifm-code-font-size: 92%;
   --ifm-font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
@@ -17,38 +18,40 @@
   --ifm-font-family-monospace: 'JetBrains Mono', ui-monospace, SFMono-Regular,
     'SF Mono', Menlo, Consolas, monospace;
   --ifm-heading-font-weight: 700;
-  --ifm-navbar-shadow: inset 0 -1px 0 0 rgba(17, 20, 34, 0.08);
-  --docusaurus-highlighted-code-line-bg: rgba(91, 78, 224, 0.1);
+  --ifm-navbar-shadow: inset 0 -1px 0 0 rgba(11, 61, 42, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(34, 197, 94, 0.12);
 
-  --mindr-accent: #12b8a0;
+  --mindr-accent: #22c55e;      /* vivid brand emerald */
+  --mindr-brand-deep: #0b3d2a;  /* forest green */
   --mindr-surface: #ffffff;
-  --mindr-surface-2: #f6f7fb;
-  --mindr-border: rgba(17, 20, 34, 0.09);
-  --mindr-muted: #55596b;
-  --mindr-ink: #12131a;
+  --mindr-surface-2: #f1f8f4;   /* faint green tint */
+  --mindr-border: rgba(11, 61, 42, 0.12);
+  --mindr-muted: #4b5a53;
+  --mindr-ink: #0c1c15;
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary: #9a8bff;
-  --ifm-color-primary-dark: #7f6dff;
-  --ifm-color-primary-darker: #7160ff;
-  --ifm-color-primary-darkest: #4f3fd6;
-  --ifm-color-primary-light: #b3a8ff;
-  --ifm-color-primary-lighter: #c1b8ff;
-  --ifm-color-primary-lightest: #ddd8ff;
+  --ifm-color-primary: #34d07e;
+  --ifm-color-primary-dark: #24c56f;
+  --ifm-color-primary-darker: #1fb968;
+  --ifm-color-primary-darkest: #17994f;
+  --ifm-color-primary-light: #4ed98f;
+  --ifm-color-primary-lighter: #5cdd98;
+  --ifm-color-primary-lightest: #82e6b1;
 
-  --ifm-background-color: #0c0e15;
-  --ifm-background-surface-color: #12141d;
-  --ifm-navbar-background-color: rgba(12, 14, 21, 0.72);
+  --ifm-background-color: #071c14;
+  --ifm-background-surface-color: #0d2c20;
+  --ifm-navbar-background-color: rgba(7, 28, 20, 0.72);
   --ifm-navbar-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.06);
-  --docusaurus-highlighted-code-line-bg: rgba(154, 139, 255, 0.16);
+  --docusaurus-highlighted-code-line-bg: rgba(52, 208, 126, 0.16);
 
-  --mindr-accent: #2dd4bf;
-  --mindr-surface: #12141d;
-  --mindr-surface-2: #171a25;
-  --mindr-border: rgba(255, 255, 255, 0.08);
-  --mindr-muted: #a2a6b8;
-  --mindr-ink: #f2f3f8;
+  --mindr-accent: #34d399;
+  --mindr-brand-deep: #0b3d2a;
+  --mindr-surface: #0d2c20;
+  --mindr-surface-2: #10382a;
+  --mindr-border: rgba(255, 255, 255, 0.09);
+  --mindr-muted: #9db4a8;
+  --mindr-ink: #eaf5ef;
 }
 
 html {
@@ -56,20 +59,35 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-/* Frosted, subtle navbar */
+/* Frosted navbar */
 .navbar {
   backdrop-filter: saturate(160%) blur(10px);
-  background: var(--ifm-navbar-background-color, rgba(255, 255, 255, 0.75));
+  background: var(--ifm-navbar-background-color, rgba(255, 255, 255, 0.78));
 }
 .navbar__title {
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
-/* GitHub navbar icon */
-.header-github-link:hover {
-  opacity: 0.75;
+/* Version badge next to the wordmark */
+.navbar-version {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.1rem;
+  padding: 0.12rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: var(--ifm-font-family-monospace);
+  letter-spacing: 0.01em;
+  color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--mindr-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mindr-accent) 34%, transparent);
+  border-radius: 999px;
 }
+.navbar-version:hover { text-decoration: none; color: var(--ifm-color-primary); }
+
+/* GitHub navbar icon */
+.header-github-link:hover { opacity: 0.72; }
 .header-github-link::before {
   content: '';
   width: 22px;
@@ -78,25 +96,28 @@ html {
   background: no-repeat center / contain
     url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.34.85 0 1.7.12 2.5.34 1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z'/%3E%3C/svg%3E");
 }
-[data-theme='dark'] .header-github-link::before {
-  filter: invert(1);
-}
+[data-theme='dark'] .header-github-link::before { filter: invert(1); }
 
-/* Slightly softer content cards for admonitions/code */
+/* Rounded code + soft cards */
 .theme-code-block,
-pre code {
-  border-radius: 10px;
+pre code { border-radius: 10px; }
+article a { font-weight: 500; }
+
+/* Admonition polish (reference-style callouts) */
+.theme-admonition {
+  border-radius: 12px;
+  border: 1px solid var(--mindr-border);
+  box-shadow: none;
 }
 
-article a {
-  font-weight: 500;
-}
-
-/* Sidebar active item accent */
+/* Sidebar active accent */
 .menu__link--active:not(.menu__link--sublist) {
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--ifm-color-primary) 14%, transparent),
+    color-mix(in srgb, var(--ifm-color-primary) 15%, transparent),
     transparent
   );
 }
+
+/* Hero-ish first heading spacing on doc pages */
+.markdown h1:first-child { letter-spacing: -0.025em; }

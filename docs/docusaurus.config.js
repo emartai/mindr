@@ -152,11 +152,12 @@ module.exports = {
   ],
   themeConfig: {
     image: 'img/mindr-social-card.svg',
-    colorMode: { defaultMode: 'dark', respectPrefersColorScheme: true },
+    colorMode: { defaultMode: 'light', respectPrefersColorScheme: true },
     navbar: {
       title: 'Mindr',
       logo: { alt: 'Mindr logo', src: 'img/logo.svg' },
       items: [
+        { type: 'html', position: 'left', value: '<a class="navbar-version" href="https://www.npmjs.com/package/mindragent" target="_blank" rel="noopener">v0.2.7</a>' },
         { to: '/docs/quickstart', label: 'Docs', position: 'left' },
         { to: '/docs/cli', label: 'CLI', position: 'left' },
         { to: '/docs/sdk', label: 'SDK', position: 'left' },

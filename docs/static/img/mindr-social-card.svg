@@ -1,16 +1,16 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0d0f16"/>
-      <stop offset="1" stop-color="#161326"/>
+      <stop stop-color="#071c14"/>
+      <stop offset="1" stop-color="#0b3d2a"/>
     </linearGradient>
     <linearGradient id="brand" x1="80" y1="220" x2="360" y2="420" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8b7cff"/>
-      <stop offset="1" stop-color="#4f3fd6"/>
+      <stop stop-color="#34d399"/>
+      <stop offset="1" stop-color="#16a34a"/>
     </linearGradient>
     <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 120) rotate(120) scale(520)">
-      <stop stop-color="#5b4ee0" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="#5b4ee0" stop-opacity="0"/>
+      <stop stop-color="#22c55e" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
@@ -32,8 +32,8 @@
   </g>
 
   <text x="320" y="300" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="104" font-weight="800" fill="#ffffff" letter-spacing="-3">mindr</text>
-  <text x="322" y="372" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="40" font-weight="600" fill="#c7c9d6">Persistent memory for your coding agents</text>
-  <text x="322" y="430" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="26" fill="#8b7cff">$ npm i -g mindragent &amp;&amp; mindr init</text>
+  <text x="322" y="372" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="40" font-weight="600" fill="#c3d6cc">Persistent memory for your coding agents</text>
+  <text x="322" y="430" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="26" fill="#34d399">$ npm i -g mindragent &amp;&amp; mindr init</text>
 
-  <text x="96" y="566" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="600" fill="#8a8da0" opacity="0.85">Learns conventions · Captures decisions · Tracks debt · MCP for any agent</text>
+  <text x="96" y="566" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="600" fill="#7f978b" opacity="0.9">An Emart AI project · Learns conventions · Captures decisions · Tracks debt</text>
 </svg>

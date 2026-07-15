@@ -7,6 +7,12 @@ agent over the Model Context Protocol — or writes it into `AGENTS.md` / `CLAUD
 New here? Start with **[Why Mindr](./why-mindr.md)** for the motivation, or jump straight to the
 **[Quickstart](./quickstart.md)**.
 
+:::tip Open source & local-first
+Mindr is MIT-licensed and part of [Emart AI](https://github.com/emartai). It runs on local SQLite
+by default — zero config, no account, nothing leaves your machine. Scale to
+[Remembr](./self-hosting.md) when you need cross-machine, cross-team memory.
+:::
+
 ## Popular pages
 
 - **[Quickstart](./quickstart.md)** — install, initialize, and connect your agent in a few minutes
