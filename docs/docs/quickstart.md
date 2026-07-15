@@ -99,30 +99,49 @@ After a few commits or manual memories, generate a structured snapshot:
 mindr generate agents-md
 ```
 
-This writes `AGENTS.md` to your project root. Agents read it at session start. Re-run it after major decisions to keep it fresh.
+This writes `AGENTS.md` to your project root, leading with an auto-detected
+**Commands** section — build, test, run, and lint pulled from your `package.json`
+scripts, `Makefile`, or language conventions (`pytest`, `go test`, `cargo`) — followed
+by your stack, conventions, recent decisions, and active warnings. In a polyglot
+monorepo, per-package commands are listed scoped by directory (e.g. `cd server && pytest`).
+
+Prefer Claude Code's format, or want both?
+
+```bash
+mindr generate claude-md     # CLAUDE.md
+mindr generate --all         # AGENTS.md + CLAUDE.md
+```
+
+Agents read these at session start. Re-run after major decisions to keep them fresh.
 
 ## What agents receive
 
-When an agent calls `mindr:get_context`, it receives:
+When an agent calls `mindr:get_context`, it receives a compact, priority-ordered brief
+that is trimmed to fit a token budget:
 
-```
+```text
 === MINDR CONTEXT ===
 
-## Stack
-- TypeScript, Express, PostgreSQL
-- tRPC (internal), REST (external)
+[WARNINGS]
+  FIXME `src/billing/invoice.ts:47` — retry logic
 
-## Conventions (typescript)
-- camelCase functions: 97%
-- PascalCase classes: 100%
-- kebab-case files: 89%
+[RECENT DECISIONS]
+  2026-05-01 — switch internal APIs to tRPC [keyword]
+  2026-04-15 — JWT + Redis refresh tokens [keyword]
 
-## Recent Decisions
-- [2026-05-01] [api] Switch internal APIs to tRPC
-- [2026-04-15] [auth] JWT + Redis refresh tokens
+[COMMANDS]
+  Install: pnpm install
+  Build:   pnpm build
+  Test:    pnpm test
+  Lint:    pnpm lint
 
-## Warnings
-⚠ FIXME src/billing/invoice.ts:47 — retry logic (high, 43d)
+[CONVENTIONS]
+  typescript: functionNames=camelCase(97%), classNames=PascalCase(100%), fileNames=kebab-case(89%)
+
+[STACK OVERVIEW]
+  Languages: TypeScript
+  Stack: Express, PostgreSQL, tRPC
+  Hot modules: api (12), auth (7)
 
 === END CONTEXT ===
 ```

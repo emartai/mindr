@@ -1,0 +1,39 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0d0f16"/>
+      <stop offset="1" stop-color="#161326"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="80" y1="220" x2="360" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8b7cff"/>
+      <stop offset="1" stop-color="#4f3fd6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 120) rotate(120) scale(520)">
+      <stop stop-color="#5b4ee0" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#5b4ee0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- logo mark -->
+  <g transform="translate(96 232) scale(4.2)">
+    <g stroke="url(#brand)" stroke-width="2.1" stroke-linecap="round">
+      <line x1="16" y1="16" x2="7" y2="8"/>
+      <line x1="16" y1="16" x2="25" y2="9"/>
+      <line x1="16" y1="16" x2="8.5" y2="24.5"/>
+      <line x1="16" y1="16" x2="24" y2="24"/>
+    </g>
+    <circle cx="16" cy="16" r="5" fill="url(#brand)"/>
+    <circle cx="7" cy="8" r="3" fill="url(#brand)"/>
+    <circle cx="25" cy="9" r="3" fill="url(#brand)"/>
+    <circle cx="8.5" cy="24.5" r="3" fill="url(#brand)"/>
+    <circle cx="24" cy="24" r="3" fill="url(#brand)"/>
+  </g>
+
+  <text x="320" y="300" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="104" font-weight="800" fill="#ffffff" letter-spacing="-3">mindr</text>
+  <text x="322" y="372" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="40" font-weight="600" fill="#c7c9d6">Persistent memory for your coding agents</text>
+  <text x="322" y="430" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace" font-size="26" fill="#8b7cff">$ npm i -g mindragent &amp;&amp; mindr init</text>
+
+  <text x="96" y="566" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="600" fill="#8a8da0" opacity="0.85">Learns conventions · Captures decisions · Tracks debt · MCP for any agent</text>
+</svg>

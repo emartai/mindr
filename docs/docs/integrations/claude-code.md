@@ -53,24 +53,28 @@ Claude Code can call these tools automatically:
 
 ## What Claude receives
 
-At the start of a session, `mindr:get_context` returns:
+At the start of a session, `mindr:get_context` returns a compact, priority-ordered brief:
 
 ```text
 === MINDR CONTEXT ===
 
-## Stack
-- TypeScript, Express, PostgreSQL
+[WARNINGS]
+  FIXME `src/billing/invoice.ts:47` — retry logic
 
-## Conventions (typescript)
-- camelCase functions: 97%
-- PascalCase classes: 100%
+[RECENT DECISIONS]
+  2026-05-01 — switch internal APIs to tRPC [keyword]
+  2026-04-15 — JWT + Redis refresh tokens [keyword]
 
-## Recent Decisions
-- [2026-05-01] [api] Switch internal APIs to tRPC
-- [2026-04-15] [auth] JWT + Redis refresh tokens
+[COMMANDS]
+  Install: pnpm install
+  Test:    pnpm test
 
-## Warnings
-⚠ FIXME src/billing/invoice.ts:47 — retry logic (high, 43d)
+[CONVENTIONS]
+  typescript: functionNames=camelCase(97%), classNames=PascalCase(100%)
+
+[STACK OVERVIEW]
+  Languages: TypeScript
+  Stack: Express, PostgreSQL
 
 === END CONTEXT ===
 ```

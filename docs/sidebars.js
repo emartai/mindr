@@ -1,6 +1,7 @@
 export default {
   docs: [
     'index',
+    'why-mindr',
     'quickstart',
     'cli',
     'sdk',

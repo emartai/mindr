@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Mindr — brand theme
+   ========================================================================== */
+
+:root {
+  --ifm-color-primary: #5b4ee0;
+  --ifm-color-primary-dark: #4634db;
+  --ifm-color-primary-darker: #3d2ad4;
+  --ifm-color-primary-darkest: #3323ad;
+  --ifm-color-primary-light: #7264e6;
+  --ifm-color-primary-lighter: #8577e9;
+  --ifm-color-primary-lightest: #a99ff1;
+
+  --ifm-code-font-size: 92%;
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', ui-monospace, SFMono-Regular,
+    'SF Mono', Menlo, Consolas, monospace;
+  --ifm-heading-font-weight: 700;
+  --ifm-navbar-shadow: inset 0 -1px 0 0 rgba(17, 20, 34, 0.08);
+  --docusaurus-highlighted-code-line-bg: rgba(91, 78, 224, 0.1);
+
+  --mindr-accent: #12b8a0;
+  --mindr-surface: #ffffff;
+  --mindr-surface-2: #f6f7fb;
+  --mindr-border: rgba(17, 20, 34, 0.09);
+  --mindr-muted: #55596b;
+  --mindr-ink: #12131a;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #9a8bff;
+  --ifm-color-primary-dark: #7f6dff;
+  --ifm-color-primary-darker: #7160ff;
+  --ifm-color-primary-darkest: #4f3fd6;
+  --ifm-color-primary-light: #b3a8ff;
+  --ifm-color-primary-lighter: #c1b8ff;
+  --ifm-color-primary-lightest: #ddd8ff;
+
+  --ifm-background-color: #0c0e15;
+  --ifm-background-surface-color: #12141d;
+  --ifm-navbar-background-color: rgba(12, 14, 21, 0.72);
+  --ifm-navbar-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.06);
+  --docusaurus-highlighted-code-line-bg: rgba(154, 139, 255, 0.16);
+
+  --mindr-accent: #2dd4bf;
+  --mindr-surface: #12141d;
+  --mindr-surface-2: #171a25;
+  --mindr-border: rgba(255, 255, 255, 0.08);
+  --mindr-muted: #a2a6b8;
+  --mindr-ink: #f2f3f8;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Frosted, subtle navbar */
+.navbar {
+  backdrop-filter: saturate(160%) blur(10px);
+  background: var(--ifm-navbar-background-color, rgba(255, 255, 255, 0.75));
+}
+.navbar__title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* GitHub navbar icon */
+.header-github-link:hover {
+  opacity: 0.75;
+}
+.header-github-link::before {
+  content: '';
+  width: 22px;
+  height: 22px;
+  display: flex;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.34.85 0 1.7.12 2.5.34 1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z'/%3E%3C/svg%3E");
+}
+[data-theme='dark'] .header-github-link::before {
+  filter: invert(1);
+}
+
+/* Slightly softer content cards for admonitions/code */
+.theme-code-block,
+pre code {
+  border-radius: 10px;
+}
+
+article a {
+  font-weight: 500;
+}
+
+/* Sidebar active item accent */
+.menu__link--active:not(.menu__link--sublist) {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ifm-color-primary) 14%, transparent),
+    transparent
+  );
+}

@@ -1,5 +1,31 @@
-# Mindr
+# Mindr documentation
 
-Mindr is memory-augmented developer tooling for agents. It stores durable memories through Remembr, falls back to local SQLite, and injects scoped context without asking agents to reread the world.
+Mindr gives your AI coding agents a persistent memory of your codebase. A post-commit git
+hook learns your conventions, decisions, and technical debt, then serves that context to any
+agent over the Model Context Protocol — or writes it into `AGENTS.md` / `CLAUDE.md`.
 
-Start with [Quickstart](./quickstart.md), then connect your agent from the integrations section.
+New here? Start with **[Why Mindr](./why-mindr.md)** for the motivation, or jump straight to the
+**[Quickstart](./quickstart.md)**.
+
+## Popular pages
+
+- **[Quickstart](./quickstart.md)** — install, initialize, and connect your agent in a few minutes
+- **[CLI Reference](./cli.md)** — every command and flag
+- **[SDK Reference](./sdk.md)** — programmatic access from TypeScript
+- **[Architecture](./architecture.md)** — how the capture → store → serve pipeline works
+
+## Connect your agent
+
+Mindr speaks MCP, so one memory works across tools:
+[Claude Code](./integrations/claude-code.md), [Cursor](./integrations/cursor.md),
+[Codex](./integrations/codex.md), [Aider](./integrations/aider.md),
+[Windsurf](./integrations/windsurf.md), [Continue](./integrations/continue-dev.md), and
+[OpenCode](./integrations/opencode.md).
+
+## Concepts
+
+Deep dives on the [memory schema](./concepts/memory-schema.md),
+[branch-aware memory](./concepts/branch-aware-memory.md),
+[conventions](./concepts/conventions.md), [decisions](./concepts/decisions.md),
+[bug patterns](./concepts/bug-patterns.md), [technical debt](./concepts/debt.md),
+[quality score](./concepts/quality-score.md), and [context health](./concepts/context-health.md).

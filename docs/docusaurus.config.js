@@ -127,10 +127,80 @@ function requireResolveWeakFix() {
 
 module.exports = {
   title: 'Mindr',
+  tagline: 'Persistent memory for your coding agents',
   url: 'https://emartai.github.io',
   baseUrl: '/mindr/',
+  favicon: 'img/favicon.svg',
   organizationName: 'emartai',
   projectName: 'mindr',
-  presets: [['classic', { docs: { routeBasePath: '/', sidebarPath: './sidebars.js' }, blog: false }]],
+  trailingSlash: false,
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          routeBasePath: '/docs',
+          sidebarPath: './sidebars.js',
+          editUrl: 'https://github.com/emartai/mindr/tree/main/docs/',
+        },
+        blog: false,
+        theme: { customCss: './src/css/custom.css' },
+      },
+    ],
+  ],
+  themeConfig: {
+    image: 'img/mindr-social-card.svg',
+    colorMode: { defaultMode: 'dark', respectPrefersColorScheme: true },
+    navbar: {
+      title: 'Mindr',
+      logo: { alt: 'Mindr logo', src: 'img/logo.svg' },
+      items: [
+        { to: '/docs/quickstart', label: 'Docs', position: 'left' },
+        { to: '/docs/cli', label: 'CLI', position: 'left' },
+        { to: '/docs/sdk', label: 'SDK', position: 'left' },
+        { to: '/docs/why-mindr', label: 'Why Mindr', position: 'left' },
+        {
+          href: 'https://github.com/emartai/mindr',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
+          position: 'right',
+        },
+      ],
+    },
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: 'Docs',
+          items: [
+            { label: 'Quickstart', to: '/docs/quickstart' },
+            { label: 'CLI Reference', to: '/docs/cli' },
+            { label: 'SDK Reference', to: '/docs/sdk' },
+            { label: 'Architecture', to: '/docs/architecture' },
+          ],
+        },
+        {
+          title: 'Concepts',
+          items: [
+            { label: 'Memory schema', to: '/docs/concepts/memory-schema' },
+            { label: 'Conventions', to: '/docs/concepts/conventions' },
+            { label: 'Decisions', to: '/docs/concepts/decisions' },
+            { label: 'Technical debt', to: '/docs/concepts/debt' },
+          ],
+        },
+        {
+          title: 'More',
+          items: [
+            { label: 'GitHub', href: 'https://github.com/emartai/mindr' },
+            { label: 'npm', href: 'https://www.npmjs.com/package/mindragent' },
+            { label: 'Emart AI', href: 'https://github.com/emartai' },
+          ],
+        },
+      ],
+      copyright: `© ${new Date().getFullYear()} Emart AI · Built with Docusaurus`,
+    },
+  },
   plugins: [requireResolveWeakFix],
 }
