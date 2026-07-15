@@ -1,6 +1,6 @@
 {
   "name": "@emartai/mindr",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "TypeScript SDK for Mindr — persistent codebase memory for AI coding agents",
   "private": false,
   "type": "module",
@@ -12,7 +12,14 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "keywords": ["ai", "memory", "agents", "mcp", "codebase", "typescript"],
+  "keywords": [
+    "ai",
+    "memory",
+    "agents",
+    "mcp",
+    "codebase",
+    "typescript"
+  ],
   "license": "MIT",
   "author": "emartai",
   "repository": {
@@ -29,7 +36,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "vitest run",

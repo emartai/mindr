@@ -11,6 +11,14 @@ A demonstration application
 **Version:** 1.2.0  
 **Language:** typescript
 
+## Commands
+
+| Task | Command |
+|------|---------|
+| Install | \`pnpm install\` |
+| Build | \`pnpm build\` |
+| Test | \`pnpm test\` |
+
 ## Stack & Architecture
 
 **Language**
@@ -59,6 +67,12 @@ A demonstration application
 
 This is a **typescript project** using TypeScript, React, Vitest.
 Version: 1.2.0
+
+## Commands
+
+- **Install:** \`pnpm install\`
+- **Build:** \`pnpm build\`
+- **Test:** \`pnpm test\`
 
 ## Stack & Architecture
 

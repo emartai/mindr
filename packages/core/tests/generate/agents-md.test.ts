@@ -101,6 +101,11 @@ const FIXTURE_CONTEXT: GenerateContext = {
     language: 'typescript',
     repoUrl: 'https://github.com/example/demo-app',
   },
+  commands: [
+    { label: 'Install', command: 'pnpm install' },
+    { label: 'Build',   command: 'pnpm build' },
+    { label: 'Test',    command: 'pnpm test' },
+  ],
   stack: [
     { name: 'TypeScript', role: 'language',       category: 'language'   },
     { name: 'React',      role: 'UI library',      category: 'framework'  },
@@ -165,10 +170,20 @@ describe('generateAgentsMd — snapshot', () => {
   it('contains all required sections', async () => {
     const backend = new MockBackend([])
     const md = await generateAgentsMd('/mock/root', backend, { context: FIXTURE_CONTEXT })
+    expect(md).toContain('## Commands')
     expect(md).toContain('## Stack & Architecture')
     expect(md).toContain('## Conventions')
     expect(md).toContain('## Recent Decisions')
     expect(md).toContain('## Active Warnings')
+  })
+
+  it('renders detected commands and leads with them (before Stack)', async () => {
+    const backend = new MockBackend([])
+    const md = await generateAgentsMd('/mock/root', backend, { context: FIXTURE_CONTEXT })
+    expect(md).toContain('pnpm test')
+    expect(md).toContain('pnpm build')
+    // Commands must appear before the Stack section — agents need them first.
+    expect(md.indexOf('## Commands')).toBeLessThan(md.indexOf('## Stack & Architecture'))
   })
 
   it('renders project name and version', async () => {
@@ -238,12 +253,14 @@ describe('generateAgentsMd — empty backend', () => {
     const backend = new MockBackend([])
     const ctx: GenerateContext = {
       meta: { name: 'empty-app', description: '', version: '0.0.0', language: 'unknown', repoUrl: null },
+      commands: [],
       stack: [],
       conventions: [],
       decisions: [],
       debt: [],
     }
     const md = await generateAgentsMd('/mock/root', backend, { context: ctx })
+    expect(md).toContain('No commands detected')
     expect(md).toContain('No convention analysis yet')
     expect(md).toContain('No decisions recorded')
     expect(md).toContain('No active debt items')

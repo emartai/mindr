@@ -4,7 +4,7 @@ import type { MemoryBackend, MindrMemory } from '../storage/backend.js'
 import type { ConventionProfile } from '../conventions/detector.js'
 import { branchMemoryQuery } from '../git/lineage.js'
 import { scoreMemoryQuality } from '../quality/score.js'
-import { detectStack } from '../generate/context.js'
+import { detectStack, detectCommands, type CommandItem } from '../generate/context.js'
 
 // ---------------------------------------------------------------------------
 
@@ -35,6 +35,7 @@ export interface HotModule {
 
 export interface SessionContext {
   stack: string[]                                              // language names from convention profiles
+  commands: CommandItem[]                                     // build/test/run/lint commands (requires repoRoot)
   conventions: Array<{ language: string; rules: string[] }>  // top rules per language
   decisions: Array<{ date: string; summary: string; trigger?: string }>
   recentTask: { date: string; summary: string; module: string } | null
@@ -46,13 +47,14 @@ export interface SessionContext {
 }
 
 // Section priority: higher = kept longer when trimming.
-// Drop order when over budget: stack (0) → conventions (1) → hotModules (2) → decisions (3) → warnings (4)
+// Drop order when over budget: stack (0) → conventions (1) → commands (2) → decisions (3) → recentTask (4) → warnings (5)
 const SECTION_PRIORITY = {
   stackOverview: 0,
   conventions:   1,
-  decisions:     2,
-  recentTask:    3,
-  warnings:      4,
+  commands:      2,
+  decisions:     3,
+  recentTask:    4,
+  warnings:      5,
 } as const
 
 type SectionName = keyof typeof SECTION_PRIORITY
@@ -78,6 +80,12 @@ function renderStackOverview(langs: string[], tech: string[], mods: HotModule[])
   }
   if (lines.length === 0) return ''
   return `[STACK OVERVIEW]\n${lines.join('\n')}\n`
+}
+
+function renderCommands(commands: CommandItem[]): string {
+  if (commands.length === 0) return ''
+  const lines = commands.map((c) => `  ${c.label}: ${c.command}`)
+  return `[COMMANDS]\n${lines.join('\n')}\n`
 }
 
 function renderConventions(conventions: SessionContext['conventions']): string {
@@ -257,6 +265,7 @@ export async function buildSessionContext(
   // just "python". Falls back to the convention languages otherwise.
   let overviewLangs: string[] = stack
   let overviewTech: string[] = []
+  let commands: CommandItem[] = []
   if (repoRoot) {
     const items = detectStack(repoRoot)
     if (items.length > 0) {
@@ -264,6 +273,7 @@ export async function buildSessionContext(
       overviewLangs = langs.length > 0 ? langs : stack
       overviewTech = items.filter((i) => i.category !== 'language').map((i) => i.name)
     }
+    commands = detectCommands(repoRoot)
   }
 
   const conventions = profiles.map((p) => ({
@@ -279,6 +289,7 @@ export async function buildSessionContext(
   const sections: Record<SectionName, string> = {
     stackOverview: renderStackOverview(overviewLangs, overviewTech, hotModules),
     conventions:   renderConventions(conventions),
+    commands:      renderCommands(commands),
     decisions:     renderDecisions(decisions),
     recentTask:    renderRecentTask(recentTask),
     warnings:      renderWarnings(warnings),
@@ -320,6 +331,7 @@ export async function buildSessionContext(
 
   return {
     stack,
+    commands,
     conventions,
     decisions,
     recentTask,

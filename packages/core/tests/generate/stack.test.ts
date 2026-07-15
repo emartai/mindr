@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
-import { detectStack } from '../../src/generate/context.js'
+import { detectStack, detectCommands } from '../../src/generate/context.js'
 
 let dir: string
 
@@ -67,5 +67,63 @@ describe('detectStack', () => {
       JSON.stringify({ dependencies: { react: '^18' } }),
     )
     expect(detectStack(dir)).toEqual([])
+  })
+})
+
+describe('detectCommands', () => {
+  it('extracts npm scripts and uses the detected package manager (pnpm)', () => {
+    writeFileSync(
+      join(dir, 'package.json'),
+      JSON.stringify({ scripts: { dev: 'vite', build: 'tsc', test: 'vitest', lint: 'eslint .' } }),
+    )
+    writeFileSync(join(dir, 'pnpm-lock.yaml'), 'lockfileVersion: 6.0\n')
+    const cmds = detectCommands(dir)
+    const map = Object.fromEntries(cmds.map((c) => [c.label, c.command]))
+    expect(map['Install']).toBe('pnpm install')
+    expect(map['Dev']).toBe('pnpm dev')
+    expect(map['Build']).toBe('pnpm build')
+    expect(map['Test']).toBe('pnpm test')
+    expect(map['Lint']).toBe('pnpm lint')
+    // Install must be first in canonical order.
+    expect(cmds[0].label).toBe('Install')
+  })
+
+  it('uses `npm run <script>` (and bare npm for test) when no lockfile signals another manager', () => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ scripts: { build: 'tsc', test: 'vitest' } }))
+    const map = Object.fromEntries(detectCommands(dir).map((c) => [c.label, c.command]))
+    expect(map['Install']).toBe('npm install')
+    expect(map['Build']).toBe('npm run build')
+    expect(map['Test']).toBe('npm test')
+  })
+
+  it('parses Makefile targets', () => {
+    writeFileSync(join(dir, 'Makefile'), ['install:\n\tpip install -e .', 'test:\n\tpytest', 'lint:\n\truff check'].join('\n'))
+    const map = Object.fromEntries(detectCommands(dir).map((c) => [c.label, c.command]))
+    expect(map['Install']).toBe('make install')
+    expect(map['Test']).toBe('make test')
+    expect(map['Lint']).toBe('make lint')
+  })
+
+  it('falls back to Python conventions (pip install + pytest) with no scripts', () => {
+    writeFileSync(join(dir, 'requirements.txt'), 'fastapi\npytest\n')
+    writeFileSync(join(dir, 'conftest.py'), '')
+    const map = Object.fromEntries(detectCommands(dir).map((c) => [c.label, c.command]))
+    expect(map['Install']).toBe('pip install -r requirements.txt')
+    expect(map['Test']).toBe('pytest')
+  })
+
+  it('detects Go and Rust conventions', () => {
+    writeFileSync(join(dir, 'go.mod'), 'module example.com/app\n\ngo 1.22\n')
+    expect(Object.fromEntries(detectCommands(dir).map((c) => [c.label, c.command]))['Test']).toBe('go test ./...')
+
+    rmSync(join(dir, 'go.mod'))
+    writeFileSync(join(dir, 'Cargo.toml'), '[package]\nname = "app"\n')
+    const rust = Object.fromEntries(detectCommands(dir).map((c) => [c.label, c.command]))
+    expect(rust['Build']).toBe('cargo build')
+    expect(rust['Test']).toBe('cargo test')
+  })
+
+  it('returns [] for a repo with no manifests', () => {
+    expect(detectCommands(dir)).toEqual([])
   })
 })

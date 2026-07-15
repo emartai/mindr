@@ -100,6 +100,18 @@ function renderDebt(debt: GenerateContext['debt']): string {
     .join('\n') + '\n'
 }
 
+function renderCommands(commands: GenerateContext['commands']): string {
+  if (commands.length === 0) {
+    return '_No commands detected. Add scripts to `package.json`/`Makefile` and re-run `mindr generate`._\n'
+  }
+  const rows = commands.map((c) => `| ${c.label} | \`${c.command}\` |`)
+  return [
+    '| Task | Command |',
+    '|------|---------|',
+    ...rows,
+  ].join('\n') + '\n'
+}
+
 function renderStack(stack: GenerateContext['stack']): string {
   if (stack.length === 0) return '_Could not detect stack from project files._\n'
 
@@ -126,7 +138,7 @@ export async function generateAgentsMd(
   opts: GenerateOptions = {},
 ): Promise<string> {
   const ctx = opts.context ?? await gatherContext(repoRoot, backend)
-  const { meta, stack, conventions, decisions, debt } = ctx
+  const { meta, commands, stack, conventions, decisions, debt } = ctx
 
   const lines: string[] = []
 
@@ -146,6 +158,12 @@ export async function generateAgentsMd(
     lines.push(badges.join('  \n'))
     lines.push('')
   }
+
+  // --- Commands (agents need these first) ---
+  lines.push('## Commands')
+  lines.push('')
+  lines.push(renderCommands(commands).trimEnd())
+  lines.push('')
 
   // --- Stack & Architecture ---
   lines.push('## Stack & Architecture')

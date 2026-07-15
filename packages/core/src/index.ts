@@ -84,8 +84,8 @@ export { estimateTokens, estimateSavings, type TokenSavingsEstimate } from './me
 export { getStats, type MindrStats } from './metering/stats.js'
 export { scoreMemoryQuality, type QualityBreakdown, type QualityStats } from './quality/score.js'
 
-export type { ProjectMeta, StackItem, StackCategory, GenerateContext } from './generate/context.js'
-export { gatherContext, getProjectMeta, detectStack, queryConventions, queryDecisions, queryDebt } from './generate/context.js'
+export type { ProjectMeta, StackItem, StackCategory, CommandItem, GenerateContext } from './generate/context.js'
+export { gatherContext, getProjectMeta, detectStack, detectCommands, queryConventions, queryDecisions, queryDebt } from './generate/context.js'
 
 export {
   SIGNATURE as AGENTS_MD_SIGNATURE,

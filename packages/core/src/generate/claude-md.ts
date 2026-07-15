@@ -58,6 +58,13 @@ function renderConventions(conventions: ConventionProfile[]): string {
   return out.join('\n')
 }
 
+function renderCommands(commands: GenerateContext['commands']): string {
+  if (commands.length === 0) {
+    return '_No commands detected. Add scripts to `package.json`/`Makefile` and re-run `mindr generate`._\n'
+  }
+  return commands.map((c) => `- **${c.label}:** \`${c.command}\``).join('\n') + '\n'
+}
+
 function renderStack(stack: GenerateContext['stack']): string {
   if (stack.length === 0) return '_Could not detect stack._\n'
   return stack.map((s) => `- **${s.name}** — ${s.role}`).join('\n') + '\n'
@@ -99,7 +106,7 @@ export async function generateClaudeMd(
   opts: GenerateOptions = {},
 ): Promise<string> {
   const ctx = opts.context ?? await gatherContext(repoRoot, backend)
-  const { meta, stack, conventions, decisions, debt } = ctx
+  const { meta, commands, stack, conventions, decisions, debt } = ctx
 
   const lines: string[] = []
 
@@ -127,6 +134,12 @@ export async function generateClaudeMd(
       : ''
   lines.push(`This is a **${langStr}**${stackStr}.`)
   if (meta.version && meta.version !== '0.0.0') lines.push(`Version: ${meta.version}`)
+  lines.push('')
+
+  // --- Commands ---
+  lines.push('## Commands')
+  lines.push('')
+  lines.push(renderCommands(commands).trimEnd())
   lines.push('')
 
   // --- Stack & Architecture ---

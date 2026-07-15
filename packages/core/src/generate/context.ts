@@ -27,8 +27,15 @@ export interface StackItem {
   category: StackCategory
 }
 
+/** A build/test/run/lint command an agent should use, auto-extracted from the repo. */
+export interface CommandItem {
+  label: string    // canonical label: Install | Dev | Build | Test | Lint | Typecheck | Format | Run
+  command: string  // the exact shell command, e.g. `pnpm test`
+}
+
 export interface GenerateContext {
   meta: ProjectMeta
+  commands: CommandItem[]            // build/test/run/lint commands, in canonical order
   stack: StackItem[]
   conventions: ConventionProfile[]   // latest per language, sorted by language name asc
   decisions: MindrMemory[]           // top 5 most recent
@@ -412,6 +419,125 @@ export function detectStack(repoRoot: string): StackItem[] {
 }
 
 // ---------------------------------------------------------------------------
+// Command detection
+//
+// Real AGENTS.md/CLAUDE.md files lead with the commands an agent needs to run:
+// install, build, test, lint, etc. We extract these from the most authoritative
+// source available — package.json scripts and Makefile targets are explicit and
+// exact; ecosystem conventions (pytest, go test, cargo) fill gaps for languages
+// that don't declare scripts. Root-level only: that's where top-level commands
+// live, and guessing per-package commands in a monorepo would mislead.
+// ---------------------------------------------------------------------------
+
+// Canonical output order — install first, then the run/verify loop.
+const COMMAND_ORDER = ['Install', 'Dev', 'Build', 'Test', 'Lint', 'Typecheck', 'Format', 'Run']
+
+// npm-script name → canonical label. First matching name per label wins.
+const NPM_SCRIPT_LABELS: Array<{ label: string; names: string[] }> = [
+  { label: 'Dev',       names: ['dev', 'start', 'serve'] },
+  { label: 'Build',     names: ['build'] },
+  { label: 'Test',      names: ['test'] },
+  { label: 'Lint',      names: ['lint'] },
+  { label: 'Typecheck', names: ['typecheck', 'type-check', 'tsc', 'check-types'] },
+  { label: 'Format',    names: ['format', 'fmt'] },
+]
+
+// Makefile target → canonical label.
+const MAKE_TARGET_LABELS: Array<{ label: string; names: string[] }> = [
+  { label: 'Install', names: ['install', 'setup', 'deps', 'bootstrap'] },
+  { label: 'Dev',     names: ['dev', 'run', 'serve', 'start'] },
+  { label: 'Build',   names: ['build'] },
+  { label: 'Test',    names: ['test'] },
+  { label: 'Lint',    names: ['lint'] },
+  { label: 'Format',  names: ['format', 'fmt'] },
+]
+
+function detectPackageManager(repoRoot: string): 'pnpm' | 'yarn' | 'bun' | 'npm' {
+  if (existsSync(join(repoRoot, 'pnpm-lock.yaml'))) return 'pnpm'
+  if (existsSync(join(repoRoot, 'yarn.lock'))) return 'yarn'
+  if (existsSync(join(repoRoot, 'bun.lockb')) || existsSync(join(repoRoot, 'bun.lock'))) return 'bun'
+  return 'npm'
+}
+
+// Render the command that runs a given npm script under the detected manager.
+function runNpmScript(pm: 'pnpm' | 'yarn' | 'bun' | 'npm', script: string): string {
+  if (pm === 'npm') return script === 'test' || script === 'start' ? `npm ${script}` : `npm run ${script}`
+  if (pm === 'bun') return `bun run ${script}`
+  return `${pm} ${script}` // pnpm / yarn run scripts by bare name
+}
+
+export function detectCommands(repoRoot: string): CommandItem[] {
+  const byLabel = new Map<string, string>()
+  const add = (label: string, command: string): void => {
+    if (!byLabel.has(label)) byLabel.set(label, command)
+  }
+
+  // 1. package.json scripts — the most explicit, authoritative source.
+  const pkg = readJsonSafe(join(repoRoot, 'package.json'))
+  if (pkg) {
+    const names = new Set(Object.keys((pkg['scripts'] as Record<string, unknown>) ?? {}))
+    const pm = detectPackageManager(repoRoot)
+    add('Install', pm === 'yarn' ? 'yarn' : `${pm} install`)
+    for (const { label, names: candidates } of NPM_SCRIPT_LABELS) {
+      const found = candidates.find((n) => names.has(n))
+      if (found) add(label, runNpmScript(pm, found))
+    }
+  }
+
+  // 2. Makefile targets.
+  const make = readFileSafe(join(repoRoot, 'Makefile')) ?? readFileSafe(join(repoRoot, 'makefile'))
+  if (make) {
+    const targets = new Set<string>()
+    const re = /^([a-zA-Z][\w-]*)\s*:/gm
+    let m: RegExpExecArray | null
+    while ((m = re.exec(make)) !== null) targets.add(m[1])
+    for (const { label, names } of MAKE_TARGET_LABELS) {
+      const found = names.find((n) => targets.has(n))
+      if (found) add(label, `make ${found}`)
+    }
+  }
+
+  // 3. Ecosystem conventions — fill gaps for languages without scripts/Makefile.
+  // Python
+  const pyprojectPath = join(repoRoot, 'pyproject.toml')
+  const pyprojectRaw = readFileSafe(pyprojectPath)
+  const rootReqs = ['requirements.txt', 'requirements-dev.txt', 'requirements/dev.txt']
+    .find((r) => existsSync(join(repoRoot, r)))
+  if (pyprojectRaw || rootReqs) {
+    if (pyprojectRaw) {
+      const py = readTomlSafe(pyprojectPath)
+      const tool = py?.['tool'] as Record<string, unknown> | undefined
+      if (existsSync(join(repoRoot, 'uv.lock'))) add('Install', 'uv sync')
+      else if (tool?.['poetry']) add('Install', 'poetry install')
+      else if (py?.['project']) add('Install', 'pip install -e .')
+    }
+    if (rootReqs) add('Install', `pip install -r ${rootReqs}`)
+    // pytest is the near-universal Python runner; only claim it when it's referenced.
+    const usesPytest =
+      (pyprojectRaw?.includes('pytest') ?? false) ||
+      existsSync(join(repoRoot, 'pytest.ini')) ||
+      existsSync(join(repoRoot, 'tox.ini')) ||
+      existsSync(join(repoRoot, 'conftest.py'))
+    if (usesPytest) add('Test', 'pytest')
+  }
+  // Go
+  if (existsSync(join(repoRoot, 'go.mod'))) {
+    add('Build', 'go build ./...')
+    add('Test', 'go test ./...')
+  }
+  // Rust
+  if (existsSync(join(repoRoot, 'Cargo.toml'))) {
+    add('Build', 'cargo build')
+    add('Test', 'cargo test')
+    add('Run', 'cargo run')
+  }
+
+  return COMMAND_ORDER
+    .filter((label) => byLabel.has(label))
+    .map((label) => ({ label, command: byLabel.get(label)! }))
+}
+
+// ---------------------------------------------------------------------------
 // Backend data queries
 // ---------------------------------------------------------------------------
 
@@ -452,5 +578,6 @@ export async function gatherContext(repoRoot: string, backend: MemoryBackend): P
     queryDebt(backend),
   ])
   const stack = detectStack(repoRoot)
-  return { meta, stack, conventions, decisions, debt }
+  const commands = detectCommands(repoRoot)
+  return { meta, commands, stack, conventions, decisions, debt }
 }
