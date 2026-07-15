@@ -62,10 +62,12 @@
 
 ## Recent Decisions
 
+- **2026-07-15** — fix(debt): don't flag TODO/FIXME quoted in generated instruction files *(dependency-change)*
+- **2026-07-15** — feat(generate): per-package monorepo commands + subdir language detection *(dependency-change)*
 - **2026-07-15** — docs(generate): document root-only command-detection architecture + monorepo TODO *(keyword)*
 
 ## Active Warnings
 
 ### Technical Debt
 
-- `packages/core/src/generate/context.ts:501` — **TODO**: (generate): detect per-package commands in polyglot monorepos (e.g.
+_No active debt items._
