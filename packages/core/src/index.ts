@@ -95,3 +95,4 @@ export {
 } from './generate/agents-md.js'
 export { generateAgentsMd } from './generate/agents-md.js'
 export { generateClaudeMd } from './generate/claude-md.js'
+export { generateGeminiMd } from './generate/gemini-md.js'
